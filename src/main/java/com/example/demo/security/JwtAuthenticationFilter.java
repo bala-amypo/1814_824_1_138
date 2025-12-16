@@ -1,3 +1,3 @@
-public class GuestPrincipal{
+public class JwtAuthenticationFilter{
     
 }
