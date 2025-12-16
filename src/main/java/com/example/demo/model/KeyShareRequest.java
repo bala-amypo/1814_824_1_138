@@ -1,1 +1,3 @@
-public class KeyShare
+public class KeyShareRequest{
+    
+}
