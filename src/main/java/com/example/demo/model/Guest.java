@@ -19,45 +19,45 @@ public class Guest{
 public Long getID(){
     return id;
 }
-public Long setId(Long id){
+public void setId(Long id){
     this.id=id;
 }
 public String getfullName(){
     return fullName;
 }
-public String setfullName(Long fullName){
+public void setfullName(Long fullName){
     this.fullName=fullName;
 }
 public String getEmail(){
     return email;
 
 }
-public String setemail(){
+public void setemail(){
     this.email=email;
 }
 public String PhoneNumber(){
     return phoneNumber;
 }
-public String setphoneNumber(){
+public void setphoneNumber(){
     this.phoneNumber=phoneNumber;
 }
 public Boolean getVerified(){
     return verified;
 }
-public Boolean setverified(){
+public void setverified(){
     this.verified=verified;
 }
 public Boolean getActive(){
     return active;
 }
-public Boolean setactive(){
+public void setactive(){
     this.active=active;
 }
 public String getRole(){
     return role;
 
 }
-public String setrole(){
+public void setrole(){
     this.role=role;
 }
 public Guest(Long id,String fullName,String email,String phoneNumber,Boolean verified,Boolean active,String role){
@@ -70,5 +70,5 @@ public Guest(Long id,String fullName,String email,String phoneNumber,Boolean ver
     this.role=role;
 }
 public Guest(){
-    
+
 }
