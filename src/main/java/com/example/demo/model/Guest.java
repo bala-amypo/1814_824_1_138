@@ -45,21 +45,30 @@ public Boolean getVerified(){
     return verified;
 }
 public Boolean setverified(){
-    this.verified;
+    this.verified=verified;
 }
 public Boolean getActive(){
     return active;
 }
 public Boolean setactive(){
-    this.active;
+    this.active=active;
 }
 public String getRole(){
     return role;
 
 }
 public String setrole(){
-    this.role;
+    this.role=role;
 }
 public Guest(Long id,String fullName,String email,String phoneNumber,Boolean verified,Boolean active,String role){
-    this
+    thisid=id;
+    this.fullName=fullName;
+    this.email=email;
+    this.phoneNumber=phoneNumbe;
+    this.verified=verified;
+    this.active=active;
+    this.role=role;
+}
+public Guest(){
+    
 }
