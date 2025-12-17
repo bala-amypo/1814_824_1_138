@@ -28,4 +28,33 @@ public String getfullName(){
 public String setfullName(Long fullName){
     this.fullName=fullName;
 }
-public String getEmail
+public String getEmail(){
+    return email;
+
+}
+public String setemail(){
+    this.email=email;
+}
+public String PhoneNumber(){
+    return phoneNumber;
+}
+public String setphoneNumber(){
+    this.phoneNumber;
+}
+public Boolean getVerified(){
+    return verified;
+}
+public Boolean setverified(){
+    this.verified;
+}
+public Boolean getActive(){
+    return active;
+}
+public Boolean setactive(){
+    this.active;
+}
+public String getRole(){
+    return role;
+
+}
+public String s
