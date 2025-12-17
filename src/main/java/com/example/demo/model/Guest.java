@@ -3,6 +3,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+
 @Entity
 public class Guest{
     @Id
@@ -15,7 +16,7 @@ public class Guest{
     private Boolean verified;
     private Boolean active;
     private String role;
-}
+
 public Long getId(){
     return id;
 }
@@ -71,4 +72,5 @@ public Guest(Long id,String fullName,String email,String phoneNumber,Boolean ver
 }
 public Guest(){
 
+}
 }
