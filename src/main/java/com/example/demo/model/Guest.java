@@ -26,7 +26,7 @@ public void setId(Long id){
 public String getfullName(){
     return fullName;
 }
-public void setfullName(Long fullName){
+public void setfullName(String fullName){
     this.fullName=fullName;
 }
 public String getEmail(){
@@ -62,10 +62,10 @@ public void setrole(){
     this.role=role;
 }
 public Guest(Long id,String fullName,String email,String phoneNumber,Boolean verified,Boolean active,String role){
-    thisid=id;
+    this.id=id;
     this.fullName=fullName;
     this.email=email;
-    this.phoneNumber=phoneNumbe;
+    this.phoneNumber=phoneNumber;
     this.verified=verified;
     this.active=active;
     this.role=role;
