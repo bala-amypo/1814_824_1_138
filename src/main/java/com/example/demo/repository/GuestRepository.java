@@ -1,1 +1,3 @@
-public class GuestRepository
+public class GuestRepository{
+    
+}
