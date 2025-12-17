@@ -1,6 +1,5 @@
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence
 @Entity
 public class Guest{
     @Id
@@ -9,5 +8,10 @@ public class Guest{
     private String fullName;
     @column(unique=true)
     private String email;
+    private String phoneNumber;
+    private Boolean verified;
+    private Boolean active;
+    private String role;
+
 
 }
