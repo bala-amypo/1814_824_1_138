@@ -16,7 +16,7 @@ public class Guest{
     private Boolean active;
     private String role;
 }
-public Long getID(){
+public Long getId(){
     return id;
 }
 public void setId(Long id){
