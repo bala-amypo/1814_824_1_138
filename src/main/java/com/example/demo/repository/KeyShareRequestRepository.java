@@ -1,3 +1,3 @@
-public class keyShareRequestRepository{
+public class KeyShareRequestRepository{
     
 }
