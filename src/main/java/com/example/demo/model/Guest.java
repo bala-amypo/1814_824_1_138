@@ -39,7 +39,7 @@ public String PhoneNumber(){
     return phoneNumber;
 }
 public String setphoneNumber(){
-    this.phoneNumber;
+    this.phoneNumber=phoneNumber;
 }
 public Boolean getVerified(){
     return verified;
@@ -57,4 +57,9 @@ public String getRole(){
     return role;
 
 }
-public String s
+public String setrole(){
+    this.role;
+}
+public Guest(Long id,String fullName,String email,String phoneNumber,Boolean verified,Boolean active,String role){
+    this
+}
