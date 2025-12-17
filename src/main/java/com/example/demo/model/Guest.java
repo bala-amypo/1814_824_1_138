@@ -22,3 +22,10 @@ public Long getID(){
 public Long setId(Long id){
     this.id=id;
 }
+public String getfullName(){
+    return fullName;
+}
+public String setfullName(Long fullName){
+    this.fullName=fullName;
+}
+public String getEmail
