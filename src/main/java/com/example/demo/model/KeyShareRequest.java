@@ -33,25 +33,28 @@ public class KeyShareRequest {
     @Column(nullable = false)
     private KeyShareStatus status;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // ----- Business Rules Validation -----
+    // ---------- Lifecycle callback ----------
     @PrePersist
-    public void onCreate() {
+    protected void onCreate() {
 
-        if (shareEnd.isBefore(shareStart) || shareEnd.isEqual(shareStart)) {
+        // Rule 1: shareEnd > shareStart
+        if (shareEnd == null || shareStart == null || !shareEnd.isAfter(shareStart)) {
             throw new IllegalArgumentException("shareEnd must be after shareStart");
         }
 
-        if (sharedBy.equals(sharedWith)) {
+        // Rule 2: sharedBy ≠ sharedWith
+        if (sharedBy != null && sharedBy.equals(sharedWith)) {
             throw new IllegalArgumentException("sharedBy and sharedWith cannot be the same guest");
         }
 
         this.createdAt = LocalDateTime.now();
+        this.status = KeyShareStatus.PENDING;
     }
 
-    // ----- Getters & Setters -----
+    // ---------- Getters & Setters ----------
 
     public Long getId() {
         return id;
