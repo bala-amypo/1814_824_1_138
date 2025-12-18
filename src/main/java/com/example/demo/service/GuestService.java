@@ -1,7 +1,7 @@
-package com.example.service;
+package com.example.demo.service;
 
 import java.util.List;
-import com.example.model.Guest;
+import com.example.demo.model.Guest;
 
 public interface GuestService {
 

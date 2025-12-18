@@ -1,14 +1,14 @@
-package com.example.service.impl;
+package com.example.demo.service.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.exception.ResourceNotFoundException;
-import com.example.model.Guest;
-import com.example.repository.GuestRepository;
-import com.example.service.GuestService;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.Guest;
+import com.example.demo.repository.GuestRepository;
+import com.example.demo.service.GuestService;
 
 @Service
 public class GuestServiceImpl implements GuestService {

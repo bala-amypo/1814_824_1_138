@@ -1,32 +1,30 @@
-
-package com.example.controller;
+package com.example.demo.controller;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.model.Guest;
-import com.example.service.GuestService;
+import com.example.demo.model.Guest;
+import com.example.demo.service.GuestService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/guests")
-@Tag(name = "Guest API", description = "Guest management endpoints")
+@Tag(name = "Guest API")
 public class GuestController {
 
     @Autowired
     private GuestService guestService;
 
-    @PostMapping("/")
+    @PostMapping
     public Guest createGuest(@RequestBody Guest guest) {
         return guestService.createGuest(guest);
     }
 
     @PutMapping("/{id}")
-    public Guest updateGuest(@PathVariable Long id,
-                             @RequestBody Guest guest) {
+    public Guest updateGuest(@PathVariable Long id, @RequestBody Guest guest) {
         return guestService.updateGuest(id, guest);
     }
 
@@ -34,7 +32,8 @@ public class GuestController {
     public Guest getGuestById(@PathVariable Long id) {
         return guestService.getGuestById(id);
     }
-    @GetMapping("/")
+
+    @GetMapping
     public List<Guest> getAllGuests() {
         return guestService.getAllGuests();
     }
