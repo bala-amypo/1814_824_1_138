@@ -12,7 +12,9 @@ public class GuestServiceImpl implements GuestService{
     public Guest createGuest(Guest guest){
         return lrp.save(guest);
     }
-    public List
+    public List<Guest> getAllocations(){
+        return lrp.findAll();
+    }
 
 
 } 
