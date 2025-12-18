@@ -9,4 +9,4 @@ import com.example.demo.repository.GuestRepository;
 public class GuestServiceImpl implements GuestService{
     @Autowired
 
-}
+} 
