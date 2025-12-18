@@ -4,40 +4,28 @@ import com.example.demo.model.DigitalKey;
 import com.example.demo.service.DigitalKeyService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/digital-keys")
 public class DigitalKeyController {
 
     private final DigitalKeyService digitalKeyService;
 
-    // Constructor Injection (recommended)
     public DigitalKeyController(DigitalKeyService digitalKeyService) {
         this.digitalKeyService = digitalKeyService;
     }
 
-    // POST /generate/{bookingId} - Generate key
-    @PostMapping("/generate/{bookingId}")
-    public DigitalKey generateKey(@PathVariable Long bookingId) {
-        return digitalKeyService.generateKey(bookingId);
+    @PostMapping
+    public DigitalKey create(@RequestBody DigitalKey digitalKey) {
+        return digitalKeyService.createKey(digitalKey);
     }
 
-    // GET /{id} - Get key
-    @GetMapping("/{id}")
-    public DigitalKey getKey(@PathVariable Long id) {
-        return digitalKeyService.getKeyById(id);
+    @GetMapping("/{keyValue}")
+    public DigitalKey getByKey(@PathVariable String keyValue) {
+        return digitalKeyService.getByKeyValue(keyValue);
     }
 
-    // GET /active/{bookingId} - Get active key
-    @GetMapping("/active/{bookingId}")
-    public DigitalKey getActiveKey(@PathVariable Long bookingId) {
-        return digitalKeyService.getActiveKeyForBooking(bookingId);
-    }
-
-    // GET /guest/{guestId} - List keys
-    @GetMapping("/guest/{guestId}")
-    public List<DigitalKey> getKeysForGuest(@PathVariable Long guestId) {
-        return digitalKeyService.getKeysForGuest(guestId);
+    @GetMapping("/{keyValue}/shareable")
+    public boolean canShare(@PathVariable String keyValue) {
+        return digitalKeyService.canShareKey(keyValue);
     }
 }

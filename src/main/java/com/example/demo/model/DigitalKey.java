@@ -1,13 +1,12 @@
 package com.example.demo.model;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(
     name = "digital_keys",
-    uniqueConstraints = @UniqueConstraint(columnNames = "keyValue")
+    uniqueConstraints = @UniqueConstraint(columnNames = "key_value")
 )
 public class DigitalKey {
 
@@ -19,17 +18,28 @@ public class DigitalKey {
     @JoinColumn(name = "booking_id", nullable = false)
     private RoomBooking booking;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "key_value", nullable = false, unique = true)
     private String keyValue;
 
+    @Column(nullable = false)
     private LocalDateTime issuedAt;
 
+    @Column(nullable = false)
     private LocalDateTime expiresAt;
 
-    private boolean active;
+    @Column(nullable = false)
+    private Boolean active;
 
-    // ===== GETTERS & SETTERS =====
+    // ----- Validation -----
+    @PrePersist
+    @PreUpdate
+    private void validateDates() {
+        if (expiresAt.isBefore(issuedAt)) {
+            throw new IllegalArgumentException("expiresAt must be after issuedAt");
+        }
+    }
 
+    // ----- Getters & Setters -----
     public Long getId() {
         return id;
     }
@@ -40,10 +50,6 @@ public class DigitalKey {
 
     public void setBooking(RoomBooking booking) {
         this.booking = booking;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getKeyValue() {
@@ -70,11 +76,11 @@ public class DigitalKey {
         this.expiresAt = expiresAt;
     }
 
-    public boolean isActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 }
