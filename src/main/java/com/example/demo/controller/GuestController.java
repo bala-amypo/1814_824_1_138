@@ -1,14 +1,47 @@
-package com.example.demo.controller;
+
+package com.example.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Authowired;
-import  com.example.demo.model.Guest;
-import com.example.demo.service.GuestService;
+
+import com.example.model.Guest;
+import com.example.service.GuestService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
-public class GuestController{
+@RequestMapping("/api/guests")
+@Tag(name = "Guest API", description = "Guest management endpoints")
+public class GuestController {
+
     @Autowired
-    GuestService ob;
-    @PostMapping("/guest")
-    public Guest Add(@RequestBody Guest guest){
-        return ob.createGuest(guest)
+    private GuestService guestService;
+
+    @PostMapping("/")
+    public Guest createGuest(@RequestBody Guest guest) {
+        return guestService.createGuest(guest);
+    }
+
+    @PutMapping("/{id}")
+    public Guest updateGuest(@PathVariable Long id,
+                             @RequestBody Guest guest) {
+        return guestService.updateGuest(id, guest);
+    }
+
+    @GetMapping("/{id}")
+    public Guest getGuestById(@PathVariable Long id) {
+        return guestService.getGuestById(id);
+    }
+    @GetMapping("/")
+    public List<Guest> getAllGuests() {
+        return guestService.getAllGuests();
+    }
+
+    @PutMapping("/{id}/deactivate")
+    public String deactivateGuest(@PathVariable Long id) {
+        guestService.deactivateGuest(id);
+        return "Guest deactivated successfully";
     }
 }
