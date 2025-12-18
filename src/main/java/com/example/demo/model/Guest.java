@@ -33,7 +33,7 @@ public class Guest {
     // auto-generated timestamp
     private LocalDateTime createdAt;
 
-    // ✅ Empty constructor (required by JPA)
+
     public Guest() {
     }
 
