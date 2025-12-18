@@ -25,19 +25,16 @@ public class Guest {
 
     private Boolean verified;
     
-    // defaults to true
     private Boolean active = true;
 
     private String role;
 
-    // auto-generated timestamp
     private LocalDateTime createdAt;
 
 
     public Guest() {
     }
 
-    // ✅ Parameterized constructor
     public Guest(Long id, String fullName, String email, String phoneNumber,
                  Boolean verified, Boolean active, String role) {
         this.id = id;
@@ -49,13 +46,13 @@ public class Guest {
         this.role = role;
     }
 
-    // ✅ Auto-generate createdAt
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
+
     public Long getId() {
         return id;
     }
