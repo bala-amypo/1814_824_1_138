@@ -8,7 +8,11 @@ import com.example.demo.repository.GuestRepository;
 @Service
 public class GuestServiceImpl implements GuestService{
     @Autowired
-    GuestRepo
+    GuestRepository lrp;
+    public Guest createGuest(Guest guest){
+        return lrp.save(guest);
+    }
+    public List
 
 
 } 
