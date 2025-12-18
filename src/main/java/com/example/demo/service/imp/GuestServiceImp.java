@@ -1,4 +1,3 @@
-
 package com.example.service.impl;
 
 import java.util.List;
@@ -28,20 +27,20 @@ public class GuestServiceImpl implements GuestService {
 
     @Override
     public Guest updateGuest(Long id, Guest guest) {
-        Guest existingGuest = guestRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Guest not found with id: " + id));
+        Guest existing = guestRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Guest not found"));
 
-        existingGuest.setName(guest.getName());
-        existingGuest.setEmail(guest.getEmail());
-        existingGuest.setPhone(guest.getPhone());
+        existing.setName(guest.getName());
+        existing.setEmail(guest.getEmail());
+        existing.setPhone(guest.getPhone());
 
-        return guestRepository.save(existingGuest);
+        return guestRepository.save(existing);
     }
 
     @Override
     public Guest getGuestById(Long id) {
         return guestRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Guest not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Guest not found"));
     }
 
     @Override
@@ -52,8 +51,7 @@ public class GuestServiceImpl implements GuestService {
     @Override
     public void deactivateGuest(Long id) {
         Guest guest = guestRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Guest not found with id: " + id));
-
+                .orElseThrow(() -> new ResourceNotFoundException("Guest not found"));
         guest.setActive(false);
         guestRepository.save(guest);
     }
