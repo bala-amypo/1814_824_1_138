@@ -1,42 +1,40 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.model.DigitalKey;
 import com.example.demo.service.DigitalKeyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/keys")
-@Tag(name = "Digital Keys")
+@RequestMapping("/api/digital-keys")
 public class DigitalKeyController {
 
-    private final DigitalKeyService digitalKeyService;
+    @Autowired
+    private DigitalKeyService digitalKeyService;
 
-    public DigitalKeyController(DigitalKeyService digitalKeyService) {
-        this.digitalKeyService = digitalKeyService;
+    // POST /generate/{bookingId} - Generate key
+    @PostMapping("/generate/{bookingId}")
+    public DigitalKey generateKey(@PathVariable Long bookingId) {
+        return digitalKeyService.generateKey(bookingId);
     }
 
-    @PostMapping
-    public DigitalKey create(@RequestBody DigitalKey key) {
-        return digitalKeyService.createKey(key);
-    }
-
+    // GET /{id} - Get key by key id
     @GetMapping("/{id}")
-    public DigitalKey get(@PathVariable Long id) {
-        return digitalKeyService.getKey(id);
+    public DigitalKey getKey(@PathVariable Long id) {
+        return digitalKeyService.getKeyById(id);
     }
 
-    @GetMapping("/booking/{bookingId}")
-    public List<DigitalKey> listForBooking(@PathVariable Long bookingId) {
-        return digitalKeyService.getKeysForBooking(bookingId);
+    // GET /active/{bookingId} - Get active key for a booking
+    @GetMapping("/active/{bookingId}")
+    public DigitalKey getActiveKey(@PathVariable Long bookingId) {
+        return digitalKeyService.getActiveKeyForBooking(bookingId);
     }
 
-    @PutMapping("/{id}/deactivate")
-    public void deactivate(@PathVariable Long id) {
-        digitalKeyService.deactivateKey(id);
+    // GET /guest/{guestId} - List keys for a guest
+    @GetMapping("/guest/{guestId}")
+    public List<DigitalKey> getKeysForGuest(@PathVariable Long guestId) {
+        return digitalKeyService.getKeysForGuest(guestId);
     }
 }
