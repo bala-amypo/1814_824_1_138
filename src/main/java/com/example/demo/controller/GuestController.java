@@ -6,5 +6,9 @@ import com.example.demo.service.GuestService;
 @RestController
 public class GuestController{
     @Autowired
-    Guest
+    GuestService ob;
+    @PostMapping("/guest")
+    public Guest Add(@RequestBody Guest guest){
+        return ob.createGuest(guest)
+    }
 }
