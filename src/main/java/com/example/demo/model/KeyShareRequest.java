@@ -7,6 +7,12 @@ import java.time.LocalDateTime;
 @Table(name = "key_share_requests")
 public class KeyShareRequest {
 
+    public enum KeyShareStatus {
+        PENDING,
+        APPROVED,
+        REJECTED
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,79 +42,20 @@ public class KeyShareRequest {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // ---------- Lifecycle callback ----------
     @PrePersist
     protected void onCreate() {
 
-        // Rule 1: shareEnd > shareStart
         if (shareEnd == null || shareStart == null || !shareEnd.isAfter(shareStart)) {
             throw new IllegalArgumentException("shareEnd must be after shareStart");
         }
 
-        // Rule 2: sharedBy ≠ sharedWith
         if (sharedBy != null && sharedBy.equals(sharedWith)) {
-            throw new IllegalArgumentException("sharedBy and sharedWith cannot be the same guest");
+            throw new IllegalArgumentException("sharedBy and sharedWith cannot be same");
         }
 
         this.createdAt = LocalDateTime.now();
         this.status = KeyShareStatus.PENDING;
     }
 
-    // ---------- Getters & Setters ----------
-
-    public Long getId() {
-        return id;
-    }
-
-    public DigitalKey getDigitalKey() {
-        return digitalKey;
-    }
-
-    public void setDigitalKey(DigitalKey digitalKey) {
-        this.digitalKey = digitalKey;
-    }
-
-    public Guest getSharedBy() {
-        return sharedBy;
-    }
-
-    public void setSharedBy(Guest sharedBy) {
-        this.sharedBy = sharedBy;
-    }
-
-    public Guest getSharedWith() {
-        return sharedWith;
-    }
-
-    public void setSharedWith(Guest sharedWith) {
-        this.sharedWith = sharedWith;
-    }
-
-    public LocalDateTime getShareStart() {
-        return shareStart;
-    }
-
-    public void setShareStart(LocalDateTime shareStart) {
-        this.shareStart = shareStart;
-    }
-
-    public LocalDateTime getShareEnd() {
-        return shareEnd;
-    }
-
-    public void setShareEnd(LocalDateTime shareEnd) {
-        this.shareEnd = shareEnd;
-    }
-
-    public KeyShareStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(KeyShareStatus status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    // getters & setters omitted for brevity
 }
