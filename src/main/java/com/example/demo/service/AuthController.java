@@ -1,4 +1,10 @@
 package com.example.demo.service;
-public class AuthController{
-    
+
+import com.example.demo.model.User;
+
+public interface AuthService {
+
+    User register(User user);
+
+    User login(String username, String password);
 }
