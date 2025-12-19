@@ -1,52 +1,48 @@
-package com.example.model;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "access_logs")
+@Table(name = "access_log")
 public class AccessLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
+    private Long keyId;
 
-    private String action;
+    private Long guestId;
 
-    private LocalDateTime timestamp;
+    private String result;
 
-    // Getters and setters
+    // ===== getters and setters =====
+
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getKeyId() {
+        return keyId;
     }
 
-    public String getUsername() {
-        return username;
+    public void setKeyId(Long keyId) {
+        this.keyId = keyId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public Long getGuestId() {
+        return guestId;
     }
 
-    public String getAction() {
-        return action;
+    public void setGuestId(Long guestId) {
+        this.guestId = guestId;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public String getResult() {
+        return result;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+    public void setResult(String result) {
+        this.result = result;
     }
 }
