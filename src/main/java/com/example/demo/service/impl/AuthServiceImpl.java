@@ -2,39 +2,39 @@ package com.example.demo.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.model.Auth;
+import com.example.demo.repository.AuthRepository;
 import com.example.demo.service.AuthService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final UserRepository userRepository;
+    private final AuthRepository authRepository;
 
-    public AuthServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AuthServiceImpl(AuthRepository authRepository) {
+        this.authRepository = authRepository;
     }
 
     @Override
-    public User register(User user) {
+    public Auth register(Auth auth) {
 
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+        if (authRepository.findByUsername(auth.getUsername()).isPresent()) {
             throw new RuntimeException("Username already exists");
         }
 
-        return userRepository.save(user);
+        return authRepository.save(auth);
     }
 
     @Override
-    public User login(String username, String password) {
+    public Auth login(String username, String password) {
 
-        User user = userRepository.findByUsername(username)
+        Auth auth = authRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Invalid username"));
 
-        if (!user.getPassword().equals(password)) {
+        if (!auth.getPassword().equals(password)) {
             throw new RuntimeException("Invalid password");
         }
 
-        return user;
+        return auth;
     }
 }

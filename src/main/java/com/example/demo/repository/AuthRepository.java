@@ -2,9 +2,9 @@ package com.example.demo.repository;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.demo.model.User;
+import com.example.demo.model.Auth;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface AuthRepository extends JpaRepository<Auth, Long> {
 
-    Optional<User> findByUsername(String username);
+    Optional<Auth> findByUsername(String username);
 }
