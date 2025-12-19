@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -11,75 +11,42 @@ public class AccessLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "digital_key_id", nullable = false)
-    private DigitalKey digitalKey;
+    private String username;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "guest_id", nullable = false)
-    private Guest guest;
+    private String action;
 
-    @Column(nullable = false)
-    private LocalDateTime accessTime;
+    private LocalDateTime timestamp;
 
-    @Column(nullable = false, length = 20)
-    private String result; // SUCCESS or DENIED
-
-    private String reason;
-
-    /* ---------- Lifecycle Validation ---------- */
-
-    @PrePersist
-    @PreUpdate
-    private void validateAccessTime() {
-        if (accessTime != null && accessTime.isAfter(LocalDateTime.now())) {
-            throw new IllegalArgumentException("Access time cannot be in the future");
-        }
-    }
-
-    /* ---------- Getters & Setters ---------- */
-
+    // Getters and setters
     public Long getId() {
         return id;
     }
 
-    public DigitalKey getDigitalKey() {
-        return digitalKey;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setDigitalKey(DigitalKey digitalKey) {
-        this.digitalKey = digitalKey;
+    public String getUsername() {
+        return username;
     }
 
-    public Guest getGuest() {
-        return guest;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setGuest(Guest guest) {
-        this.guest = guest;
+    public String getAction() {
+        return action;
     }
 
-    public LocalDateTime getAccessTime() {
-        return accessTime;
+    public void setAction(String action) {
+        this.action = action;
     }
 
-    public void setAccessTime(LocalDateTime accessTime) {
-        this.accessTime = accessTime;
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 }
