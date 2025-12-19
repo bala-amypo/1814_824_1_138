@@ -23,13 +23,11 @@ public class AccessLogServiceImpl implements AccessLogService {
 
     @Override
     public AccessLog createLog(AccessLog log) {
-
         if (keyRepository.existsById(log.getKeyId())) {
             log.setResult("SUCCESS");
         } else {
             log.setResult("DENIED");
         }
-
         return accessLogRepository.save(log);
     }
 

@@ -3,7 +3,6 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "access_log")
 public class AccessLog {
 
     @Id
@@ -11,12 +10,8 @@ public class AccessLog {
     private Long id;
 
     private Long keyId;
-
     private Long guestId;
-
     private String result;
-
-    // ===== getters and setters =====
 
     public Long getId() {
         return id;
