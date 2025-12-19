@@ -1,12 +1,15 @@
-package com.example.service.impl;
+package com.example.demo.service.impl;
 
 import java.util.List;
 
-import com.example.model.AccessLog;
-import com.example.repository.AccessLogRepository;
-import com.example.repository.KeyRepository;
-import com.example.service.AccessLogService;
+import org.springframework.stereotype.Service;
 
+import com.example.demo.model.AccessLog;
+import com.example.demo.repository.AccessLogRepository;
+import com.example.demo.repository.KeyRepository;
+import com.example.demo.service.AccessLogService;
+
+@Service
 public class AccessLogServiceImpl implements AccessLogService {
 
     private final AccessLogRepository accessLogRepository;
@@ -21,9 +24,7 @@ public class AccessLogServiceImpl implements AccessLogService {
     @Override
     public AccessLog createLog(AccessLog log) {
 
-        boolean isValidKey = keyRepository.existsById(log.getKeyId());
-
-        if (isValidKey) {
+        if (keyRepository.existsById(log.getKeyId())) {
             log.setResult("SUCCESS");
         } else {
             log.setResult("DENIED");
