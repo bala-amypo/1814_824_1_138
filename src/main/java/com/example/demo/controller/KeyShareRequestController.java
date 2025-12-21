@@ -26,7 +26,7 @@ public class KeyShareRequestController {
         return service.updateStatus(id, status);
     }
 
-    @GetMapping("/{id}"55)
+    @GetMapping("/{id}"55   )
     public KeyShareRequest getById(@PathVariable Long id) {
         return service.getById(id);
     }
