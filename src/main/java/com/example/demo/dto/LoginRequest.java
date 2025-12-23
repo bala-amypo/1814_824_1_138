@@ -12,11 +12,11 @@ public class LoginRequest {
     @NotBlank(message = "Password is required")
     private String password;
 
-    // ✅ No-args constructor
+    
     public LoginRequest() {
     }
 
-    // ✅ All-args constructor
+    
     public LoginRequest(String email, String password) {
         this.email = email;
         this.password = password;
