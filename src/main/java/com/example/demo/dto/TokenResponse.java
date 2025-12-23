@@ -5,7 +5,7 @@ public class TokenResponse {
     private String token;
     private String tokenType = "Bearer";
 
-    // ✅ No-args constructor
+    
     public TokenResponse() {
     }
 
