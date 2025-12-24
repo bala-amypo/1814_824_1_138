@@ -1,33 +1,25 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.KeyShareRequest;
 import com.example.demo.service.KeyShareRequestService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/key-share-requests")
+@RequestMapping("/api/key-share")
 public class KeyShareRequestController {
 
-    private final KeyShareRequestService service;
+    private final KeyShareRequestService keyShareService;
 
-    public KeyShareRequestController(KeyShareRequestService service) {
-        this.service = service;
+    public KeyShareRequestController(KeyShareRequestService keyShareService) {
+        this.keyShareService = keyShareService;
     }
 
     @PostMapping
-    public KeyShareRequest create(@RequestBody KeyShareRequest request) {
-        return service.createRequest(request);
-    }
+    public ResponseEntity<String> shareKey(
+            @RequestParam Long fromGuestId,
+            @RequestParam Long toGuestId) {
 
-    @PutMapping("/{id}/status")
-    public KeyShareRequest updateStatus(
-            @PathVariable Long id,
-            @RequestParam String status) {
-        return service.updateStatus(id, status);
-    }
-
-    @GetMapping("/{id}" )
-    public KeyShareRequest getById(@PathVariable Long id) {
-        return service.getById(id);
+        keyShareService.shareKey(fromGuestId, toGuestId);
+        return ResponseEntity.ok("Key shared successfully");
     }
 }
