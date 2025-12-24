@@ -8,6 +8,7 @@ import com.example.demo.service.AccessLogService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;   // ✅ REQUIRED
 
 @Service
 public class AccessLogServiceImpl implements AccessLogService {
