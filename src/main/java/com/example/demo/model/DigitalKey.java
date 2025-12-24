@@ -4,21 +4,27 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
+@Table(name = "digital_keys")
 public class DigitalKey {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String keyValue;
     private Instant issuedAt;
     private Instant expiresAt;
-    private boolean active;
+    private boolean active = true;
 
     @ManyToOne
+    @JoinColumn(name = "booking_id")
     private RoomBooking booking;
 
     @ManyToOne
+    @JoinColumn(name = "guest_id")
     private Guest guest;
 
-    // Getters and setters
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getKeyValue() { return keyValue; }

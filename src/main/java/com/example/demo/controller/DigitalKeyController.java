@@ -2,11 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.model.DigitalKey;
 import com.example.demo.service.DigitalKeyService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/keys")
+@RequestMapping("/keys")
 public class DigitalKeyController {
 
     private final DigitalKeyService digitalKeyService;
@@ -16,8 +17,17 @@ public class DigitalKeyController {
     }
 
     @PostMapping("/generate/{bookingId}")
-    public ResponseEntity<DigitalKey> generateKey(@PathVariable Long bookingId) {
-        DigitalKey key = digitalKeyService.generateKey(bookingId);
-        return ResponseEntity.ok(key);
+    public DigitalKey generateKey(@PathVariable Long bookingId) {
+        return digitalKeyService.generateKey(bookingId);
+    }
+
+    @GetMapping("/active/{bookingId}")
+    public DigitalKey getActiveKey(@PathVariable Long bookingId) {
+        return digitalKeyService.getActiveKeyForBooking(bookingId);
+    }
+
+    @GetMapping("/guest/{guestId}")
+    public List<DigitalKey> getKeysForGuest(@PathVariable Long guestId) {
+        return digitalKeyService.getKeysForGuest(guestId);
     }
 }
