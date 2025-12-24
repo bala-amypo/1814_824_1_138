@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface AccessLogService {
 
-    AccessLog save(AccessLog accessLog);
+    AccessLog logAccess(Long guestId);   // 🔥 ADD THIS
 
     List<AccessLog> getAllLogs();
 }
