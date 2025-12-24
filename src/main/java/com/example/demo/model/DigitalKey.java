@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.Instant;
 
 @Entity
 public class DigitalKey {
@@ -10,20 +9,45 @@ public class DigitalKey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String keyValue;
-    private Instant expiry;
-
     @ManyToOne
-    private RoomBooking booking;
+    @JoinColumn(name = "guest_id")
+    private Guest guest;
 
-    public Long getId() { return id; }
+    @Column(unique = true)
+    private String keyValue;
 
-    public String getKeyValue() { return keyValue; }
-    public void setKeyValue(String keyValue) { this.keyValue = keyValue; }
+    private boolean active;
 
-    public Instant getExpiry() { return expiry; }
-    public void setExpiry(Instant expiry) { this.expiry = expiry; }
+    // ✅ GETTERS & SETTERS
+    public Long getId() {
+        return id;
+    }
 
-    public RoomBooking getBooking() { return booking; }
-    public void setBooking(RoomBooking booking) { this.booking = booking; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Guest getGuest() {
+        return guest;
+    }
+
+    public void setGuest(Guest guest) {
+        this.guest = guest;
+    }
+
+    public String getKeyValue() {
+        return keyValue;
+    }
+
+    public void setKeyValue(String keyValue) {
+        this.keyValue = keyValue;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }
