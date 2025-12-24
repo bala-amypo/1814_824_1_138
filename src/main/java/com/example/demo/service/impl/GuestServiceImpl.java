@@ -1,9 +1,9 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Guest;
 import com.example.demo.repository.GuestRepository;
 import com.example.demo.service.GuestService;
-import com.example.demo.exception.ResourceNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +11,7 @@ import java.util.List;
 
 @Service
 public class GuestServiceImpl implements GuestService {
+
     private final GuestRepository guestRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -21,8 +22,9 @@ public class GuestServiceImpl implements GuestService {
 
     @Override
     public Guest createGuest(Guest guest) {
-        if (guestRepository.existsByEmail(guest.getEmail()))
+        if (guestRepository.existsByEmail(guest.getEmail())) {
             throw new IllegalArgumentException("Email already exists");
+        }
         guest.setPassword(passwordEncoder.encode(guest.getPassword()));
         return guestRepository.save(guest);
     }
@@ -30,7 +32,12 @@ public class GuestServiceImpl implements GuestService {
     @Override
     public Guest getGuestById(Long id) {
         return guestRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException("Guest not found: " + id));
+    }
+
+    @Override
+    public List<Guest> getAllGuests() {
+        return guestRepository.findAll();
     }
 
     @Override
@@ -38,8 +45,8 @@ public class GuestServiceImpl implements GuestService {
         Guest existing = getGuestById(id);
         if (guest.getFullName() != null) existing.setFullName(guest.getFullName());
         if (guest.getPhoneNumber() != null) existing.setPhoneNumber(guest.getPhoneNumber());
-        if (guest.getRole() != null) existing.setRole(guest.getRole());
         existing.setActive(guest.isActive());
+        if (guest.getRole() != null) existing.setRole(guest.getRole());
         existing.setVerified(guest.isVerified());
         return guestRepository.save(existing);
     }
@@ -49,10 +56,5 @@ public class GuestServiceImpl implements GuestService {
         Guest existing = getGuestById(id);
         existing.setActive(false);
         guestRepository.save(existing);
-    }
-
-    @Override
-    public List<Guest> getAllGuests() {
-        return guestRepository.findAll();
     }
 }
