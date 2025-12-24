@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.Instant;
 
 @Entity
 public class AccessLog {
@@ -9,35 +10,20 @@ public class AccessLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long keyId;
-    private Long guestId;
-    private String result;
+    private Instant accessTime;
+    private String status;
 
-    public Long getId() {
-        return id;
-    }
+    @ManyToOne
+    private Guest guest;
 
-    public Long getKeyId() {
-        return keyId;
-    }
+    public Long getId() { return id; }
 
-    public void setKeyId(Long keyId) {
-        this.keyId = keyId;
-    }
+    public Instant getAccessTime() { return accessTime; }
+    public void setAccessTime(Instant accessTime) { this.accessTime = accessTime; }
 
-    public Long getGuestId() {
-        return guestId;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public void setGuestId(Long guestId) {
-        this.guestId = guestId;
-    }
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
+    public Guest getGuest() { return guest; }
+    public void setGuest(Guest guest) { this.guest = guest; }
 }

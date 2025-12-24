@@ -1,11 +1,9 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
-import jakarta.persistence.*;
-
 @Entity
-@Table(name = "room_bookings")
 public class RoomBooking {
 
     @Id
@@ -13,63 +11,24 @@ public class RoomBooking {
     private Long id;
 
     private String roomNumber;
-
     private LocalDate checkInDate;
-
     private LocalDate checkOutDate;
 
-    private boolean active;
+    @ManyToOne
+    private Guest guest;
 
-    @Column(name = "guest_id")
-    private Long guestId;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    // ===== GETTERS & SETTERS =====
+    public String getRoomNumber() { return roomNumber; }
+    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
 
-    public Long getId() {
-        return id;
-    }
+    public LocalDate getCheckInDate() { return checkInDate; }
+    public void setCheckInDate(LocalDate checkInDate) { this.checkInDate = checkInDate; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public LocalDate getCheckOutDate() { return checkOutDate; }
+    public void setCheckOutDate(LocalDate checkOutDate) { this.checkOutDate = checkOutDate; }
 
-    public String getRoomNumber() {
-        return roomNumber;
-    }
-
-    public void setRoomNumber(String roomNumber) {
-        this.roomNumber = roomNumber;
-    }
-
-    public LocalDate getCheckInDate() {
-        return checkInDate;
-    }
-
-    public void setCheckInDate(LocalDate checkInDate) {
-        this.checkInDate = checkInDate;
-    }
-
-    public LocalDate getCheckOutDate() {
-        return checkOutDate;
-    }
-
-    public void setCheckOutDate(LocalDate checkOutDate) {
-        this.checkOutDate = checkOutDate;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public Long getGuestId() {
-        return guestId;
-    }
-
-    public void setGuestId(Long guestId) {
-        this.guestId = guestId;
-    }
+    public Guest getGuest() { return guest; }
+    public void setGuest(Guest guest) { this.guest = guest; }
 }
