@@ -1,33 +1,51 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.DigitalKey;
+import com.example.demo.model.RoomBooking;
 import com.example.demo.repository.DigitalKeyRepository;
+import com.example.demo.repository.RoomBookingRepository;
 import com.example.demo.service.DigitalKeyService;
-import org.springframework.stereotype.Service;
 
-@Service
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+
 public class DigitalKeyServiceImpl implements DigitalKeyService {
 
-    private final DigitalKeyRepository digitalKeyRepository;
+    private final DigitalKeyRepository keyRepo;
+    private final RoomBookingRepository bookingRepo;
 
-    public DigitalKeyServiceImpl(DigitalKeyRepository digitalKeyRepository) {
-        this.digitalKeyRepository = digitalKeyRepository;
+    public DigitalKeyServiceImpl(DigitalKeyRepository keyRepo, RoomBookingRepository bookingRepo) {
+        this.keyRepo = keyRepo;
+        this.bookingRepo = bookingRepo;
     }
 
     @Override
-    public DigitalKey createKey(DigitalKey digitalKey) {
-        return digitalKeyRepository.save(digitalKey);
+    public DigitalKey generateKey(Long bookingId) {
+        RoomBooking booking = bookingRepo.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
+        if (!booking.getActive()) {
+            throw new IllegalStateException("Booking inactive");
+        }
+
+        DigitalKey key = new DigitalKey();
+        key.setBooking(booking);
+        key.setKeyValue(UUID.randomUUID().toString());
+        key.setIssuedAt(Instant.now());
+        key.setExpiresAt(Instant.now().plusSeconds(3600));
+        return keyRepo.save(key);
     }
 
     @Override
-    public DigitalKey getByKeyValue(String keyValue) {
-        return digitalKeyRepository.findByKeyValue(keyValue)
-                .orElseThrow(() -> new RuntimeException("Digital key not found"));
+    public DigitalKey getActiveKeyForBooking(Long bookingId) {
+        return keyRepo.findByBookingIdAndActiveTrue(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Active key not found: " + bookingId));
     }
 
     @Override
-    public boolean canShareKey(String keyValue) {
-        DigitalKey key = getByKeyValue(keyValue);
-        return Boolean.TRUE.equals(key.getActive());
+    public List<DigitalKey> getKeysForGuest(Long guestId) {
+        return keyRepo.findByBookingGuestId(guestId);
     }
 }

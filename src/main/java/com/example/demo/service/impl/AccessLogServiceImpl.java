@@ -1,34 +1,54 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-import org.springframework.stereotype.Service;
-
-import com.example.demo.model.AccessLog;
-import com.example.demo.repository.AccessLogRepository;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
 import com.example.demo.service.AccessLogService;
 
-@Service
+import java.time.Instant;
+import java.util.List;
+
 public class AccessLogServiceImpl implements AccessLogService {
 
-    private final AccessLogRepository accessLogRepository;
+    private final AccessLogRepository logRepo;
+    private final DigitalKeyRepository keyRepo;
+    private final GuestRepository guestRepo;
+    private final KeyShareRequestRepository shareRepo;
 
-    public AccessLogServiceImpl(AccessLogRepository accessLogRepository) {
-        this.accessLogRepository = accessLogRepository;
+    public AccessLogServiceImpl(
+            AccessLogRepository logRepo,
+            DigitalKeyRepository keyRepo,
+            GuestRepository guestRepo,
+            KeyShareRequestRepository shareRepo) {
+        this.logRepo = logRepo;
+        this.keyRepo = keyRepo;
+        this.guestRepo = guestRepo;
+        this.shareRepo = shareRepo;
     }
 
     @Override
     public AccessLog createLog(AccessLog log) {
-        log.setResult("SUCCESS");
-        return accessLogRepository.save(log);
-    }
+        if (log.getAccessTime().isAfter(Instant.now())) {
+            throw new IllegalArgumentException("Access time cannot be in future");
+        }
 
-    @Override
-    public List<AccessLog> getLogsForKey(Long keyId) {
-        return accessLogRepository.findByKeyId(keyId);
+        DigitalKey key = keyRepo.findById(log.getDigitalKey().getId()).orElse(null);
+        Guest guest = guestRepo.findById(log.getGuest().getId()).orElse(null);
+
+        if (key != null && key.getActive()) {
+            log.setResult("SUCCESS");
+        } else {
+            log.setResult("DENIED");
+        }
+        return logRepo.save(log);
     }
 
     @Override
     public List<AccessLog> getLogsForGuest(Long guestId) {
-        return accessLogRepository.findByGuestId(guestId);
+        return logRepo.findByGuestId(guestId);
+    }
+
+    @Override
+    public List<AccessLog> getLogsForKey(Long keyId) {
+        return logRepo.findByDigitalKeyId(keyId);
     }
 }

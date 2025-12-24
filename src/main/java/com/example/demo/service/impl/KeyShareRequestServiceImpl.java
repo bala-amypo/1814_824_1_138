@@ -1,40 +1,44 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.KeyShareRequest;
-import com.example.demo.repository.KeyShareRequestRepository;
+import com.example.demo.repository.*;
 import com.example.demo.service.KeyShareRequestService;
-import org.springframework.stereotype.Service;
 
-@Service
+import java.util.List;
+
 public class KeyShareRequestServiceImpl implements KeyShareRequestService {
 
-    private final KeyShareRequestRepository repository;
+    private final KeyShareRequestRepository repo;
+    private final DigitalKeyRepository keyRepo;
+    private final GuestRepository guestRepo;
 
-    public KeyShareRequestServiceImpl(KeyShareRequestRepository repository) {
-        this.repository = repository;
+    public KeyShareRequestServiceImpl(
+            KeyShareRequestRepository repo,
+            DigitalKeyRepository keyRepo,
+            GuestRepository guestRepo) {
+        this.repo = repo;
+        this.keyRepo = keyRepo;
+        this.guestRepo = guestRepo;
     }
 
     @Override
-    public KeyShareRequest createRequest(KeyShareRequest request) {
-        request.setStatus(KeyShareRequest.KeyShareStatus.PENDING);
-        return repository.save(request);
+    public KeyShareRequest createShareRequest(KeyShareRequest req) {
+        if (req.getShareEnd().isBefore(req.getShareStart())) {
+            throw new IllegalArgumentException("Share end before start");
+        }
+        if (req.getSharedBy().getId().equals(req.getSharedWith().getId())) {
+            throw new IllegalArgumentException("sharedBy and sharedWith cannot be same");
+        }
+        return repo.save(req);
     }
 
     @Override
-    public KeyShareRequest updateStatus(Long id, String status) {
-        KeyShareRequest request = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Request not found"));
-
-        request.setStatus(
-                KeyShareRequest.KeyShareStatus.valueOf(status.toUpperCase())
-        );
-
-        return repository.save(request);
+    public List<KeyShareRequest> getRequestsSharedBy(Long guestId) {
+        return repo.findBySharedById(guestId);
     }
 
     @Override
-    public KeyShareRequest getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Request not found"));
+    public List<KeyShareRequest> getRequestsSharedWith(Long guestId) {
+        return repo.findBySharedWithId(guestId);
     }
 }
