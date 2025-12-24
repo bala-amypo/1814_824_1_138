@@ -1,52 +1,25 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "key_share_requests")
 public class KeyShareRequest {
-
-    public enum KeyShareStatus {
-        PENDING,
-        APPROVED,
-        REJECTED
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private KeyShareStatus status;
+    @ManyToOne
+    private Guest fromGuest;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @ManyToOne
+    private Guest toGuest;
 
-    @PrePersist
-    protected void onCreate() {
-        this.status = KeyShareStatus.PENDING;
-        this.createdAt = LocalDateTime.now();
-    }
+    public Long getId() { return id; }
 
-    // ---------- GETTERS ----------
+    public Guest getFromGuest() { return fromGuest; }
+    public void setFromGuest(Guest fromGuest) { this.fromGuest = fromGuest; }
 
-    public Long getId() {
-        return id;
-    }
-
-    public KeyShareStatus getStatus() {
-        return status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    // ---------- ❗ REQUIRED SETTER (THIS FIXES THE ERROR) ----------
-
-    public void setStatus(KeyShareStatus status) {
-        this.status = status;
-    }
+    public Guest getToGuest() { return toGuest; }
+    public void setToGuest(Guest toGuest) { this.toGuest = toGuest; }
 }
