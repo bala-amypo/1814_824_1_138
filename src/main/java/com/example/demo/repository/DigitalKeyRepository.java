@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface DigitalKeyRepository extends JpaRepository<DigitalKey, Long> {
 
-    Optional<DigitalKey> findByKeyValue(String keyValue);
+    Optional<DigitalKey> findByGuestId(Long guestId);
 }
