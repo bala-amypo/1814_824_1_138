@@ -1,25 +1,31 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.Instant;
 
 @Entity
 public class KeyShareRequest {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne
-    private Guest fromGuest;
-
+    private DigitalKey digitalKey;
     @ManyToOne
-    private Guest toGuest;
+    private Guest sharedBy;
+    @ManyToOne
+    private Guest sharedWith;
+    private Instant shareStart;
+    private Instant shareEnd;
 
+    // Getters and setters
     public Long getId() { return id; }
-
-    public Guest getFromGuest() { return fromGuest; }
-    public void setFromGuest(Guest fromGuest) { this.fromGuest = fromGuest; }
-
-    public Guest getToGuest() { return toGuest; }
-    public void setToGuest(Guest toGuest) { this.toGuest = toGuest; }
+    public DigitalKey getDigitalKey() { return digitalKey; }
+    public void setDigitalKey(DigitalKey digitalKey) { this.digitalKey = digitalKey; }
+    public Guest getSharedBy() { return sharedBy; }
+    public void setSharedBy(Guest sharedBy) { this.sharedBy = sharedBy; }
+    public Guest getSharedWith() { return sharedWith; }
+    public void setSharedWith(Guest sharedWith) { this.sharedWith = sharedWith; }
+    public Instant getShareStart() { return shareStart; }
+    public void setShareStart(Instant shareStart) { this.shareStart = shareStart; }
+    public Instant getShareEnd() { return shareEnd; }
+    public void setShareEnd(Instant shareEnd) { this.shareEnd = shareEnd; }
 }
