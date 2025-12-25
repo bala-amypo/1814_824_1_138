@@ -9,5 +9,5 @@ public interface AccessLogRepository extends JpaRepository<AccessLog, Long> {
 
     List<AccessLog> findByGuestId(Long guestId);
 
-    List<AccessLog> findByDigitalKeyId(Long digitalKeyId);
+    List<AccessLog> findByDigitalKeyId(Long keyId);
 }

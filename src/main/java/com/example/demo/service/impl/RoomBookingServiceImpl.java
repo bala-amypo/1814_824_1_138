@@ -4,46 +4,38 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.RoomBooking;
 import com.example.demo.repository.RoomBookingRepository;
 import com.example.demo.service.RoomBookingService;
-import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
 
-@Service
 public class RoomBookingServiceImpl implements RoomBookingService {
 
-    private final RoomBookingRepository bookingRepository;
+    private final RoomBookingRepository repo;
 
-    public RoomBookingServiceImpl(RoomBookingRepository bookingRepository) {
-        this.bookingRepository = bookingRepository;
+    public RoomBookingServiceImpl(RoomBookingRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public RoomBooking createBooking(RoomBooking booking) {
-        return bookingRepository.save(booking);
+        if (booking.getCheckOutDate().isBefore(booking.getCheckInDate())) {
+            throw new IllegalArgumentException("Check-in date must be before checkout");
+        }
+        return repo.save(booking);
     }
 
     @Override
-    public RoomBooking getBookingById(Long id) {
-        return bookingRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id " + id));
+    public RoomBooking updateBooking(Long id, RoomBooking update) {
+        RoomBooking b = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found " + id));
+
+        b.setCheckInDate(update.getCheckInDate());
+        b.setCheckOutDate(update.getCheckOutDate());
+        return repo.save(b);
     }
 
     @Override
-    public List<RoomBooking> getAllBookings() {
-        return bookingRepository.findAll();
-    }
-
-    @Override
-    public RoomBooking updateBooking(Long id, RoomBooking booking) {
-        RoomBooking existing = getBookingById(id);
-        existing.setRoomNumber(booking.getRoomNumber());
-        existing.setGuest(booking.getGuest());
-        existing.setStartDate(booking.getStartDate());
-        existing.setEndDate(booking.getEndDate());
-        return bookingRepository.save(existing);
-    }
-
-    @Override
-    public void deleteBooking(Long id) {
-        bookingRepository.deleteById(id);
+    public List<RoomBooking> getBookingsForGuest(Long guestId) {
+        return repo.findByGuestId(guestId);
     }
 }
