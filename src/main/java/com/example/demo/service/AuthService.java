@@ -1,6 +1,10 @@
-package com.example.demo.auth;
+package com.example.demo.service;
+
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.TokenResponse;
 
 public interface AuthService {
-
-    String login(String email, String password);
+    TokenResponse login(LoginRequest loginRequest);
+    void register(RegisterRequest registerRequest);
 }
