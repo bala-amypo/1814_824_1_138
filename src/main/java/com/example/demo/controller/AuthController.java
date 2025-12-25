@@ -1,6 +1,8 @@
-package com.example.demo.auth.controller;
+package com.example.demo.controller;
 
-import com.example.demo.auth.service.AuthService;
+import com.example.demo.dto.AuthRequestDTO;
+import com.example.demo.dto.TokenResponseDTO;
+import com.example.demo.service.AuthService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,14 +16,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password) {
-        return authService.login(email, password);
-    }
-
-    @PostMapping("/register")
-    public String register(@RequestParam String email,
-                           @RequestParam String password) {
-        return authService.register(email, password);
+    public TokenResponseDTO login(@RequestBody AuthRequestDTO request) {
+        return authService.login(request);
     }
 }
