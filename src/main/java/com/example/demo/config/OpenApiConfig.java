@@ -1,8 +1,10 @@
 package com.example.demo.config;
 
-import io.swagger.v3.oas.models.*;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.*;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,19 +13,18 @@ public class OpenApiConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-
-        SecurityScheme bearerScheme = new SecurityScheme()
-                .type(SecurityScheme.Type.HTTP)
-                .scheme("bearer")
-                .bearerFormat("JWT");
-
         return new OpenAPI()
+                .components(new Components())
                 .info(new Info()
-                        .title("Hotel Digital Key API")
-                        .version("1.0")
-                        .description("API documentation for Digital Key Management System"))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .components(new Components()
-                        .addSecuritySchemes("bearerAuth", bearerScheme));
+                        .title("Demo API")
+                        .description("This is the API documentation for the Demo project")
+                        .version("1.0.0")
+                        .contact(new Contact()
+                                .name("Your Name")
+                                .email("your.email@example.com")
+                                .url("https://example.com"))
+                        .license(new License()
+                                .name("Apache 2.0")
+                                .url("http://springdoc.org")));
     }
 }
