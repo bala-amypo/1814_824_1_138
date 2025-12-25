@@ -27,7 +27,7 @@ public class GuestController {
     }
 
     @GetMapping("/{id}")
-    public Guest getGuest(@PathVariable Long id) {
+    public Guest getGuestById(@PathVariable Long id) {
         return guestService.getGuestById(id);
     }
 
@@ -36,7 +36,7 @@ public class GuestController {
         return guestService.getAllGuests();
     }
 
-    @PutMapping("/{id}/deactivate")
+    @DeleteMapping("/{id}")
     public void deactivateGuest(@PathVariable Long id) {
         guestService.deactivateGuest(id);
     }

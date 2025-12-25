@@ -4,10 +4,8 @@ import com.example.demo.model.DigitalKey;
 import com.example.demo.service.DigitalKeyService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/digital-keys")
+@RequestMapping("/api/keys")
 public class DigitalKeyController {
 
     private final DigitalKeyService keyService;
@@ -21,18 +19,13 @@ public class DigitalKeyController {
         return keyService.generateKey(bookingId);
     }
 
-    @GetMapping("/{id}")
-    public DigitalKey getKey(@PathVariable Long id) {
-        return keyService.getKeyById(id);
-    }
-
     @GetMapping("/booking/{bookingId}")
     public DigitalKey getActiveKey(@PathVariable Long bookingId) {
-        return keyService.getActiveKeyForBooking(bookingId);
+        return keyService.getActiveKeyByBooking(bookingId);
     }
 
-    @GetMapping("/guest/{guestId}")
-    public List<DigitalKey> getKeysForGuest(@PathVariable Long guestId) {
-        return keyService.getKeysForGuest(guestId);
+    @PutMapping("/deactivate/{keyId}")
+    public void deactivateKey(@PathVariable Long keyId) {
+        keyService.deactivateKey(keyId);
     }
 }
