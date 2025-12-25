@@ -1,10 +1,12 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.dto.TokenResponse;
+import com.example.demo.model.AuthRequest;
+import com.example.demo.model.AuthResponse;
+import com.example.demo.model.Guest;
 
 public interface AuthService {
-    TokenResponse login(LoginRequest loginRequest);
-    void register(RegisterRequest registerRequest);
+
+    Guest register(Guest guest);
+
+    AuthResponse login(AuthRequest request);
 }
