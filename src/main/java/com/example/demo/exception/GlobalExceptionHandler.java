@@ -1,41 +1,41 @@
 package com.example.demo.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import com.example.demo.dto.ApiResponseDTO;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> handleResourceNotFound(ResourceNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(DuplicateResourceException.class)
-    public ResponseEntity<String> handleDuplicateResource(DuplicateResourceException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    public ResponseEntity<ApiResponseDTO> handleNotFound(ResourceNotFoundException ex) {
+        return new ResponseEntity<>(
+                new ApiResponseDTO(false, ex.getMessage()),
+                HttpStatus.NOT_FOUND
+        );
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<String> handleBadRequest(BadRequestException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponseDTO> handleBadRequest(BadRequestException ex) {
+        return new ResponseEntity<>(
+                new ApiResponseDTO(false, ex.getMessage()),
+                HttpStatus.BAD_REQUEST
+        );
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<String> handleUnauthorized(UnauthorizedException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
-    }
-
-    @ExceptionHandler(InvalidKeyOperationException.class)
-    public ResponseEntity<String> handleInvalidKeyOperation(InvalidKeyOperationException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponseDTO> handleUnauthorized(UnauthorizedException ex) {
+        return new ResponseEntity<>(
+                new ApiResponseDTO(false, ex.getMessage()),
+                HttpStatus.UNAUTHORIZED
+        );
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGlobal(Exception ex) {
-        return new ResponseEntity<>("Internal server error: " + ex.getMessage(),
-                HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ApiResponseDTO> handleGeneric(Exception ex) {
+        return new ResponseEntity<>(
+                new ApiResponseDTO(false, "Internal server error"),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 }
