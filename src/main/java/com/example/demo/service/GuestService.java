@@ -8,5 +8,5 @@ public interface GuestService {
     Guest getGuestById(Long id);
     List<Guest> getAllGuests();
     Guest updateGuest(Long id, Guest guest);
-    void deleteGuest(Long id);
+    void deactivateGuest(Long id);
 }

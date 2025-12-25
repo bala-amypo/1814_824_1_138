@@ -4,27 +4,33 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Guest;
 import com.example.demo.repository.GuestRepository;
 import com.example.demo.service.GuestService;
-import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.util.List;
 
-@Service
 public class GuestServiceImpl implements GuestService {
 
     private final GuestRepository guestRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public GuestServiceImpl(GuestRepository guestRepository) {
-        this.guestRepository = guestRepository;
+    public GuestServiceImpl(GuestRepository repo, PasswordEncoder encoder) {
+        this.guestRepository = repo;
+        this.passwordEncoder = encoder;
     }
 
     @Override
     public Guest createGuest(Guest guest) {
+        if (guestRepository.existsByEmail(guest.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+        guest.setPassword(passwordEncoder.encode(guest.getPassword()));
         return guestRepository.save(guest);
     }
 
     @Override
     public Guest getGuestById(Long id) {
         return guestRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Guest not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Guest not found " + id));
     }
 
     @Override
@@ -33,16 +39,20 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
-    public Guest updateGuest(Long id, Guest guest) {
-        Guest existing = getGuestById(id);
-        existing.setUsername(guest.getUsername());
-        existing.setEmail(guest.getEmail());
-        existing.setPassword(guest.getPassword());
-        return guestRepository.save(existing);
+    public Guest updateGuest(Long id, Guest update) {
+        Guest g = getGuestById(id);
+        g.setFullName(update.getFullName());
+        g.setPhoneNumber(update.getPhoneNumber());
+        g.setVerified(update.getVerified());
+        g.setActive(update.getActive());
+        g.setRole(update.getRole());
+        return guestRepository.save(g);
     }
 
     @Override
-    public void deleteGuest(Long id) {
-        guestRepository.deleteById(id);
+    public void deactivateGuest(Long id) {
+        Guest g = getGuestById(id);
+        g.setActive(false);
+        guestRepository.save(g);
     }
 }
