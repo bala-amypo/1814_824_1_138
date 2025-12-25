@@ -1,40 +1,31 @@
-package com.example.demo.service.impl;
+package com.example.demo.auth;
 
+import com.example.demo.security.JwtTokenProvider;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
-import com.example.demo.model.Auth;
-import com.example.demo.repository.AuthRepository;
-import com.example.demo.service.AuthService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final AuthRepository authRepository;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthServiceImpl(AuthRepository authRepository) {
-        this.authRepository = authRepository;
+    public AuthServiceImpl(AuthenticationManager authenticationManager,
+                           JwtTokenProvider jwtTokenProvider) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
-    public Auth register(Auth auth) {
+    public String login(String email, String password) {
 
-        if (authRepository.findByUsername(auth.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists");
-        }
+        Authentication authentication =
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(email, password)
+                );
 
-        return authRepository.save(auth);
-    }
-
-    @Override
-    public Auth login(String username, String password) {
-
-        Auth auth = authRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Invalid username"));
-
-        if (!auth.getPassword().equals(password)) {
-            throw new RuntimeException("Invalid password");
-        }
-
-        return auth;
+        return jwtTokenProvider.generateToken(authentication);
     }
 }

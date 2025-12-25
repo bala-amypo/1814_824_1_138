@@ -1,33 +1,32 @@
 package com.example.demo.security;
 
-import com.example.demo.model.Guest;
-import com.example.demo.repository.GuestRepository;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService
+        implements UserDetailsService {
 
-    private final GuestRepository guestRepository;
+    private final UserRepository userRepository;
 
-    public CustomUserDetailsService(GuestRepository guestRepository) {
-        this.guestRepository = guestRepository;
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Guest guest = guestRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(email));
+    public UserDetails loadUserByUsername(String email)
+            throws UsernameNotFoundException {
 
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(guest.getRole()));
-        return new org.springframework.security.core.userdetails.User(
-                guest.getEmail(),
-                guest.getPassword(),
-                authorities
-        );
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found"));
+
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getEmail())
+                .password(user.getPassword())
+                .roles(user.getRole().replace("ROLE_", ""))
+                .build();
     }
 }

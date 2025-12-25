@@ -1,27 +1,27 @@
-package com.example.demo.controller;
+package com.example.demo.auth;
 
-import com.example.demo.security.JwtTokenProvider;
-import org.springframework.security.authentication.*;
-import org.springframework.security.core.Authentication;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.TokenResponse;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthenticationManager authManager;
-    private final JwtTokenProvider jwtProvider;
+    private final AuthService authService;
 
-    public AuthController(AuthenticationManager a, JwtTokenProvider j) {
-        this.authManager = a;
-        this.jwtProvider = j;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password) {
-        Authentication auth = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password));
-        return jwtProvider.generateToken(auth);
+    public TokenResponse login(@RequestBody LoginRequest request) {
+
+        String token = authService.login(
+                request.getEmail(),
+                request.getPassword()
+        );
+
+        return new TokenResponse(token);
     }
 }

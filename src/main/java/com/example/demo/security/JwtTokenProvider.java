@@ -9,39 +9,36 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private final String JWT_SECRET = "secret";
-    private final long JWT_EXPIRATION_MS = 3600000; // 1 hour
+    private final String SECRET_KEY = "my-secret-key";
+    private final long EXPIRATION = 86400000; // 1 day
 
     public String generateToken(Authentication authentication) {
-        var userPrincipal = authentication.getPrincipal();
-        String email = userPrincipal.toString(); // simplified
+
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(authentication.getName())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_MS))
-                .signWith(SignatureAlgorithm.HS256, JWT_SECRET)
+                .setExpiration(
+                        new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
+    }
+
+    public String getUsernameFromToken(String token) {
+
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token);
             return true;
-        } catch (JwtException ex) {
+        } catch (Exception e) {
             return false;
         }
-    }
-
-    public Long getUserIdFromToken(String token) {
-        return System.currentTimeMillis(); // simplified mock for test
-    }
-
-    public String getEmailFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody();
-        return claims.getSubject();
-    }
-
-    public String getRoleFromToken(String token) {
-        return "ROLE_USER"; // simplified mock
     }
 }
