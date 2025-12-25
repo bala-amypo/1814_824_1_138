@@ -8,23 +8,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-public class GuestPrincipal implements UserDetails {
+public class UserPrincipal implements UserDetails {
 
     private Long id;
     private String email;
     private String password;
     private String role;
 
-    public GuestPrincipal(Long id, String email, String password, String role) {
+    public UserPrincipal(Long id, String email, String password, String role) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.role = role;
     }
 
-    // Factory method to create GuestPrincipal from Guest entity
-    public static GuestPrincipal create(Guest guest) {
-        return new GuestPrincipal(
+    public static UserPrincipal create(Guest guest) {
+        return new UserPrincipal(
                 guest.getId(),
                 guest.getEmail(),
                 guest.getPassword(),
@@ -32,17 +31,9 @@ public class GuestPrincipal implements UserDetails {
         );
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getRole() {
-        return role;
-    }
+    public Long getId() { return id; }
+    public String getEmail() { return email; }
+    public String getRole() { return role; }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -50,32 +41,17 @@ public class GuestPrincipal implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
 
     @Override
-    public String getUsername() {
-        return email;
-    }
+    public String getUsername() { return email; }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
+    public boolean isAccountNonExpired() { return true; }
     @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
+    public boolean isAccountNonLocked() { return true; }
     @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
+    public boolean isCredentialsNonExpired() { return true; }
     @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    public boolean isEnabled() { return true; }
 }
