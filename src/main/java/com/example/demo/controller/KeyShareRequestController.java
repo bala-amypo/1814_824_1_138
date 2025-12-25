@@ -2,45 +2,43 @@ package com.example.demo.controller;
 
 import com.example.demo.model.KeyShareRequest;
 import com.example.demo.service.KeyShareRequestService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/keyshare")
+@RequestMapping("/api/key-share")
 public class KeyShareRequestController {
 
-    private final KeyShareRequestService requestService;
+    private final KeyShareRequestService shareService;
 
-    @Autowired
-    public KeyShareRequestController(KeyShareRequestService requestService) {
-        this.requestService = requestService;
+    public KeyShareRequestController(KeyShareRequestService shareService) {
+        this.shareService = shareService;
     }
 
     @PostMapping
-    public ResponseEntity<KeyShareRequest> createRequest(@RequestBody KeyShareRequest request) {
-        return ResponseEntity.ok(requestService.createRequest(request));
+    public KeyShareRequest createRequest(@RequestBody KeyShareRequest request) {
+        return shareService.createRequest(request);
+    }
+
+    @PutMapping("/{id}/status")
+    public KeyShareRequest updateStatus(@PathVariable Long id,
+                                        @RequestParam String status) {
+        return shareService.updateStatus(id, status);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<KeyShareRequest> getRequestById(@PathVariable Long id) {
-        return ResponseEntity.ok(requestService.getRequestById(id));
+    public KeyShareRequest getRequest(@PathVariable Long id) {
+        return shareService.getRequestById(id);
     }
 
-    @GetMapping
-    public ResponseEntity<List<KeyShareRequest>> getAllRequests() {
-        return ResponseEntity.ok(requestService.getAllRequests());
+    @GetMapping("/shared-by/{guestId}")
+    public List<KeyShareRequest> getSharedBy(@PathVariable Long guestId) {
+        return shareService.getRequestsSharedBy(guestId);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<KeyShareRequest> updateRequest(@PathVariable Long id, @RequestBody KeyShareRequest request) {
-        return ResponseEntity.ok(requestService.updateRequest(id, request));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRequest(@PathVariable Long id) {
-        requestService.deleteRequest(id);
-        return ResponseEntity.ok("Key share request deleted successfully");
+    @GetMapping("/shared-with/{guestId}")
+    public List<KeyShareRequest> getSharedWith(@PathVariable Long guestId) {
+        return shareService.getRequestsSharedWith(guestId);
     }
 }
