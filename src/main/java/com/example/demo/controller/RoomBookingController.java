@@ -2,8 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.model.RoomBooking;
 import com.example.demo.service.RoomBookingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -12,23 +13,34 @@ public class RoomBookingController {
 
     private final RoomBookingService bookingService;
 
+    @Autowired
     public RoomBookingController(RoomBookingService bookingService) {
         this.bookingService = bookingService;
     }
 
     @PostMapping
-    public RoomBooking create(@RequestBody RoomBooking booking) {
-        return bookingService.createBooking(booking);
+    public ResponseEntity<RoomBooking> createBooking(@RequestBody RoomBooking booking) {
+        return ResponseEntity.ok(bookingService.createBooking(booking));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RoomBooking> getBookingById(@PathVariable Long id) {
+        return ResponseEntity.ok(bookingService.getBookingById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RoomBooking>> getAllBookings() {
+        return ResponseEntity.ok(bookingService.getAllBookings());
     }
 
     @PutMapping("/{id}")
-    public RoomBooking update(@PathVariable Long id,
-                              @RequestBody RoomBooking booking) {
-        return bookingService.updateBooking(id, booking);
+    public ResponseEntity<RoomBooking> updateBooking(@PathVariable Long id, @RequestBody RoomBooking booking) {
+        return ResponseEntity.ok(bookingService.updateBooking(id, booking));
     }
 
-    @GetMapping("/guest/{guestId}")
-    public List<RoomBooking> byGuest(@PathVariable Long guestId) {
-        return bookingService.getBookingsForGuest(guestId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteBooking(@PathVariable Long id) {
+        bookingService.deleteBooking(id);
+        return ResponseEntity.ok("Booking deleted successfully");
     }
 }

@@ -4,7 +4,9 @@ import com.example.demo.model.DigitalKey;
 import java.util.List;
 
 public interface DigitalKeyService {
-    DigitalKey generateKey(Long bookingId);
-    DigitalKey getActiveKeyForBooking(Long bookingId);
-    List<DigitalKey> getKeysForGuest(Long guestId);
+    DigitalKey createKey(DigitalKey key);
+    DigitalKey getKeyById(Long id);
+    List<DigitalKey> getAllKeys();
+    DigitalKey updateKey(Long id, DigitalKey key);
+    void deleteKey(Long id);
 }

@@ -2,8 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Guest;
 import com.example.demo.service.GuestService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -12,32 +13,34 @@ public class GuestController {
 
     private final GuestService guestService;
 
+    @Autowired
     public GuestController(GuestService guestService) {
         this.guestService = guestService;
     }
 
     @PostMapping
-    public Guest create(@RequestBody Guest guest) {
-        return guestService.createGuest(guest);
+    public ResponseEntity<Guest> createGuest(@RequestBody Guest guest) {
+        return ResponseEntity.ok(guestService.createGuest(guest));
     }
 
     @GetMapping("/{id}")
-    public Guest get(@PathVariable Long id) {
-        return guestService.getGuestById(id);
+    public ResponseEntity<Guest> getGuestById(@PathVariable Long id) {
+        return ResponseEntity.ok(guestService.getGuestById(id));
     }
 
     @GetMapping
-    public List<Guest> getAll() {
-        return guestService.getAllGuests();
+    public ResponseEntity<List<Guest>> getAllGuests() {
+        return ResponseEntity.ok(guestService.getAllGuests());
     }
 
     @PutMapping("/{id}")
-    public Guest update(@PathVariable Long id, @RequestBody Guest guest) {
-        return guestService.updateGuest(id, guest);
+    public ResponseEntity<Guest> updateGuest(@PathVariable Long id, @RequestBody Guest guest) {
+        return ResponseEntity.ok(guestService.updateGuest(id, guest));
     }
 
     @DeleteMapping("/{id}")
-    public void deactivate(@PathVariable Long id) {
-        guestService.deactivateGuest(id);
+    public ResponseEntity<String> deleteGuest(@PathVariable Long id) {
+        guestService.deleteGuest(id);
+        return ResponseEntity.ok("Guest deleted successfully");
     }
 }

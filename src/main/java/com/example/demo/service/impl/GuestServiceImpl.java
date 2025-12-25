@@ -4,35 +4,27 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Guest;
 import com.example.demo.repository.GuestRepository;
 import com.example.demo.service.GuestService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class GuestServiceImpl implements GuestService {
 
     private final GuestRepository guestRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public GuestServiceImpl(GuestRepository guestRepository, PasswordEncoder passwordEncoder) {
+    public GuestServiceImpl(GuestRepository guestRepository) {
         this.guestRepository = guestRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public Guest createGuest(Guest guest) {
-        if (guestRepository.existsByEmail(guest.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
-        }
-        guest.setPassword(passwordEncoder.encode(guest.getPassword()));
         return guestRepository.save(guest);
     }
 
     @Override
     public Guest getGuestById(Long id) {
         return guestRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Guest not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Guest not found with id " + id));
     }
 
     @Override
@@ -43,18 +35,14 @@ public class GuestServiceImpl implements GuestService {
     @Override
     public Guest updateGuest(Long id, Guest guest) {
         Guest existing = getGuestById(id);
-        if (guest.getFullName() != null) existing.setFullName(guest.getFullName());
-        if (guest.getPhoneNumber() != null) existing.setPhoneNumber(guest.getPhoneNumber());
-        existing.setActive(guest.isActive());
-        if (guest.getRole() != null) existing.setRole(guest.getRole());
-        existing.setVerified(guest.isVerified());
+        existing.setUsername(guest.getUsername());
+        existing.setEmail(guest.getEmail());
+        existing.setPassword(guest.getPassword());
         return guestRepository.save(existing);
     }
 
     @Override
-    public void deactivateGuest(Long id) {
-        Guest existing = getGuestById(id);
-        existing.setActive(false);
-        guestRepository.save(existing);
+    public void deleteGuest(Long id) {
+        guestRepository.deleteById(id);
     }
 }
