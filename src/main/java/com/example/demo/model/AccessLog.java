@@ -1,36 +1,27 @@
 package com.example.demo.model;
 
+
 import jakarta.persistence.*;
-import java.time.Instant;
+import java.time.*;
+
 
 @Entity
-@Table(name = "access_logs")
 public class AccessLog {
+@Id
+@GeneratedValue
+private Long id;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    private Instant accessTime;
-    private String result;
-
-    @ManyToOne
-    @JoinColumn(name = "digital_key_id")
-    private DigitalKey digitalKey;
-
-    @ManyToOne
-    @JoinColumn(name = "guest_id")
-    private Guest guest;
-
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public Instant getAccessTime() { return accessTime; }
-    public void setAccessTime(Instant accessTime) { this.accessTime = accessTime; }
-    public String getResult() { return result; }
-    public void setResult(String result) { this.result = result; }
-    public DigitalKey getDigitalKey() { return digitalKey; }
-    public void setDigitalKey(DigitalKey digitalKey) { this.digitalKey = digitalKey; }
-    public Guest getGuest() { return guest; }
-    public void setGuest(Guest guest) { this.guest = guest; }
+@ManyToOne private DigitalKey digitalKey;
+@ManyToOne private Guest guest;
+private Instant accessTime;
+private String result;
+public DigitalKey getDigitalKey() { return digitalKey; }
+public void setDigitalKey(DigitalKey d) { this.digitalKey = d; }
+public Guest getGuest() { return guest; }
+public void setGuest(Guest g) { this.guest = g; }
+public Instant getAccessTime() { return accessTime; }
+public void setAccessTime(Instant a) { this.accessTime = a; }
+public String getResult() { return result; }
+public void setResult(String r) { this.result = r; }
 }

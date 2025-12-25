@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/guests")
+@RequestMapping("/api/guests")
 public class GuestController {
 
     private final GuestService guestService;
@@ -17,27 +17,27 @@ public class GuestController {
     }
 
     @PostMapping
-    public Guest createGuest(@RequestBody Guest guest) {
+    public Guest create(@RequestBody Guest guest) {
         return guestService.createGuest(guest);
     }
 
     @GetMapping("/{id}")
-    public Guest getGuest(@PathVariable Long id) {
+    public Guest get(@PathVariable Long id) {
         return guestService.getGuestById(id);
     }
 
     @GetMapping
-    public List<Guest> getAllGuests() {
+    public List<Guest> getAll() {
         return guestService.getAllGuests();
     }
 
     @PutMapping("/{id}")
-    public Guest updateGuest(@PathVariable Long id, @RequestBody Guest guest) {
+    public Guest update(@PathVariable Long id, @RequestBody Guest guest) {
         return guestService.updateGuest(id, guest);
     }
 
-    @PostMapping("/{id}/deactivate")
-    public void deactivateGuest(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public void deactivate(@PathVariable Long id) {
         guestService.deactivateGuest(id);
     }
 }

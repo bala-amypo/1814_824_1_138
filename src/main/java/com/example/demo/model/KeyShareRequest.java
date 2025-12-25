@@ -1,42 +1,34 @@
 package com.example.demo.model;
 
+
 import jakarta.persistence.*;
-import java.time.Instant;
+import java.time.*;
+
 
 @Entity
-@Table(name = "key_share_requests")
 public class KeyShareRequest {
+@Id
+@GeneratedValue
+private Long id;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    private Instant shareStart;
-    private Instant shareEnd;
+@ManyToOne private DigitalKey digitalKey;
+@ManyToOne private Guest sharedBy;
+@ManyToOne private Guest sharedWith;
 
-    @ManyToOne
-    @JoinColumn(name = "digital_key_id")
-    private DigitalKey digitalKey;
 
-    @ManyToOne
-    @JoinColumn(name = "shared_by_id")
-    private Guest sharedBy;
+private Instant shareStart;
+private Instant shareEnd;
 
-    @ManyToOne
-    @JoinColumn(name = "shared_with_id")
-    private Guest sharedWith;
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public Instant getShareStart() { return shareStart; }
-    public void setShareStart(Instant shareStart) { this.shareStart = shareStart; }
-    public Instant getShareEnd() { return shareEnd; }
-    public void setShareEnd(Instant shareEnd) { this.shareEnd = shareEnd; }
-    public DigitalKey getDigitalKey() { return digitalKey; }
-    public void setDigitalKey(DigitalKey digitalKey) { this.digitalKey = digitalKey; }
-    public Guest getSharedBy() { return sharedBy; }
-    public void setSharedBy(Guest sharedBy) { this.sharedBy = sharedBy; }
-    public Guest getSharedWith() { return sharedWith; }
-    public void setSharedWith(Guest sharedWith) { this.sharedWith = sharedWith; }
+public DigitalKey getDigitalKey() { return digitalKey; }
+public void setDigitalKey(DigitalKey d) { this.digitalKey = d; }
+public Guest getSharedBy() { return sharedBy; }
+public void setSharedBy(Guest g) { this.sharedBy = g; }
+public Guest getSharedWith() { return sharedWith; }
+public void setSharedWith(Guest g) { this.sharedWith = g; }
+public Instant getShareStart() { return shareStart; }
+public void setShareStart(Instant s) { this.shareStart = s; }
+public Instant getShareEnd() { return shareEnd; }
+public void setShareEnd(Instant e) { this.shareEnd = e; }
 }

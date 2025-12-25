@@ -7,27 +7,28 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bookings")
+@RequestMapping("/api/bookings")
 public class RoomBookingController {
 
-    private final RoomBookingService roomBookingService;
+    private final RoomBookingService bookingService;
 
-    public RoomBookingController(RoomBookingService roomBookingService) {
-        this.roomBookingService = roomBookingService;
+    public RoomBookingController(RoomBookingService bookingService) {
+        this.bookingService = bookingService;
     }
 
     @PostMapping
-    public RoomBooking createBooking(@RequestBody RoomBooking booking) {
-        return roomBookingService.createBooking(booking);
+    public RoomBooking create(@RequestBody RoomBooking booking) {
+        return bookingService.createBooking(booking);
     }
 
     @PutMapping("/{id}")
-    public RoomBooking updateBooking(@PathVariable Long id, @RequestBody RoomBooking booking) {
-        return roomBookingService.updateBooking(id, booking);
+    public RoomBooking update(@PathVariable Long id,
+                              @RequestBody RoomBooking booking) {
+        return bookingService.updateBooking(id, booking);
     }
 
     @GetMapping("/guest/{guestId}")
-    public List<RoomBooking> getBookingsForGuest(@PathVariable Long guestId) {
-        return roomBookingService.getBookingsForGuest(guestId);
+    public List<RoomBooking> byGuest(@PathVariable Long guestId) {
+        return bookingService.getBookingsForGuest(guestId);
     }
 }

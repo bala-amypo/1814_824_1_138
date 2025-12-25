@@ -7,27 +7,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/keys")
+@RequestMapping("/api/digital-keys")
 public class DigitalKeyController {
 
-    private final DigitalKeyService digitalKeyService;
+    private final DigitalKeyService keyService;
 
-    public DigitalKeyController(DigitalKeyService digitalKeyService) {
-        this.digitalKeyService = digitalKeyService;
+    public DigitalKeyController(DigitalKeyService keyService) {
+        this.keyService = keyService;
     }
 
     @PostMapping("/generate/{bookingId}")
-    public DigitalKey generateKey(@PathVariable Long bookingId) {
-        return digitalKeyService.generateKey(bookingId);
+    public DigitalKey generate(@PathVariable Long bookingId) {
+        return keyService.generateKey(bookingId);
     }
 
-    @GetMapping("/active/{bookingId}")
-    public DigitalKey getActiveKey(@PathVariable Long bookingId) {
-        return digitalKeyService.getActiveKeyForBooking(bookingId);
+    @GetMapping("/booking/{bookingId}")
+    public DigitalKey getActive(@PathVariable Long bookingId) {
+        return keyService.getActiveKeyForBooking(bookingId);
     }
 
     @GetMapping("/guest/{guestId}")
-    public List<DigitalKey> getKeysForGuest(@PathVariable Long guestId) {
-        return digitalKeyService.getKeysForGuest(guestId);
+    public List<DigitalKey> getForGuest(@PathVariable Long guestId) {
+        return keyService.getKeysForGuest(guestId);
     }
 }

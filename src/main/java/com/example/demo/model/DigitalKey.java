@@ -1,42 +1,33 @@
 package com.example.demo.model;
 
+
 import jakarta.persistence.*;
-import java.time.Instant;
+import java.time.*;
+
 
 @Entity
-@Table(name = "digital_keys")
 public class DigitalKey {
+@Id
+@GeneratedValue
+private Long id;
+private String keyValue;
+private Instant issuedAt;
+private Instant expiresAt;
+private boolean active = true;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    private String keyValue;
-    private Instant issuedAt;
-    private Instant expiresAt;
-    private boolean active = true;
-
-    @ManyToOne
-    @JoinColumn(name = "booking_id")
-    private RoomBooking booking;
-
-    @ManyToOne
-    @JoinColumn(name = "guest_id")
-    private Guest guest;
-
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getKeyValue() { return keyValue; }
-    public void setKeyValue(String keyValue) { this.keyValue = keyValue; }
-    public Instant getIssuedAt() { return issuedAt; }
-    public void setIssuedAt(Instant issuedAt) { this.issuedAt = issuedAt; }
-    public Instant getExpiresAt() { return expiresAt; }
-    public void setExpiresAt(Instant expiresAt) { this.expiresAt = expiresAt; }
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
-    public RoomBooking getBooking() { return booking; }
-    public void setBooking(RoomBooking booking) { this.booking = booking; }
-    public Guest getGuest() { return guest; }
-    public void setGuest(Guest guest) { this.guest = guest; }
+@ManyToOne
+private RoomBooking booking;
+public Long getId() { return id; }
+public void setId(Long id) { this.id = id; }
+public String getKeyValue() { return keyValue; }
+public void setKeyValue(String k) { this.keyValue = k; }
+public Instant getIssuedAt() { return issuedAt; }
+public void setIssuedAt(Instant i) { this.issuedAt = i; }
+public Instant getExpiresAt() { return expiresAt; }
+public void setExpiresAt(Instant e) { this.expiresAt = e; }
+public boolean getActive() { return active; }
+public void setActive(boolean a) { this.active = a; }
+public RoomBooking getBooking() { return booking; }
+public void setBooking(RoomBooking b) { this.booking = b; }
 }

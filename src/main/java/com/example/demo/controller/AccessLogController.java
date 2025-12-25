@@ -7,27 +7,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/access-logs")
+@RequestMapping("/api/access-logs")
 public class AccessLogController {
 
-    private final AccessLogService accessLogService;
+    private final AccessLogService service;
 
-    public AccessLogController(AccessLogService accessLogService) {
-        this.accessLogService = accessLogService;
+    public AccessLogController(AccessLogService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public AccessLog createLog(@RequestBody AccessLog log) {
-        return accessLogService.createLog(log);
+    public AccessLog create(@RequestBody AccessLog log) {
+        return service.createLog(log);
     }
 
     @GetMapping("/guest/{guestId}")
-    public List<AccessLog> getLogsForGuest(@PathVariable Long guestId) {
-        return accessLogService.getLogsForGuest(guestId);
+    public List<AccessLog> byGuest(@PathVariable Long guestId) {
+        return service.getLogsForGuest(guestId);
     }
 
     @GetMapping("/key/{keyId}")
-    public List<AccessLog> getLogsForKey(@PathVariable Long keyId) {
-        return accessLogService.getLogsForKey(keyId);
+    public List<AccessLog> byKey(@PathVariable Long keyId) {
+        return service.getLogsForKey(keyId);
     }
 }
