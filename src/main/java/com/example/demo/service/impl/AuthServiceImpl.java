@@ -17,6 +17,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenResponseDTO login(AuthRequestDTO request) {
+        // Generate a token for the given username
         String token = jwtTokenProvider.generateToken(request.getUsername());
         return new TokenResponseDTO(token);
     }
