@@ -111,81 +111,9 @@
 //         return claims.getSubject();
 //     }
 // }
-// package com.example.demo.security;
-
-// import io.jsonwebtoken.*;
-// import io.jsonwebtoken.security.Keys;
-// import org.springframework.security.core.Authentication;
-// import org.springframework.security.core.GrantedAuthority;
-// import org.springframework.stereotype.Component;
-
-// import java.security.Key;
-// import java.util.Date;
-
-// @Component
-// public class JwtTokenProvider {
-
-//     private static final String SECRET =
-//             "THIS_IS_A_VERY_LONG_SECRET_KEY_FOR_JWT_TOKEN_SIGNING_256_BITS";
-
-//     private static final long EXPIRATION = 1000 * 60 * 60; // 1 hour
-
-//     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
-
-//     public String generateToken(Authentication authentication) {
-//         String email = authentication.getName();
-//         String role = authentication.getAuthorities()
-//                 .stream()
-//                 .map(GrantedAuthority::getAuthority)
-//                 .findFirst()
-//                 .orElse("ROLE_USER");
-
-//         return Jwts.builder()
-//                 .setSubject(email)
-//                 .claim("role", role)
-//                 .claim("userId", 1L)
-//                 .setIssuedAt(new Date())
-//                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-//                 .signWith(key, SignatureAlgorithm.HS256)
-//                 .compact();
-//     }
-
-//     public boolean validateToken(String token) {
-//         try {
-//             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-//             return true;
-//         } catch (JwtException | IllegalArgumentException ex) {
-//             return false;
-//         }
-//     }
-
-//     private Claims getClaims(String token) {
-//         return Jwts.parserBuilder()
-//                 .setSigningKey(key)
-//                 .build()
-//                 .parseClaimsJws(token)
-//                 .getBody();
-//     }
-
-//     public String getEmailFromToken(String token) {
-//         return getClaims(token).getSubject();
-//     }
-
-//     public String getRoleFromToken(String token) {
-//         return getClaims(token).get("role", String.class);
-//     }
-
-//     public Long getUserIdFromToken(String token) {
-//         return getClaims(token).get("userId", Long.class);
-//     }
-// }
-
 package com.example.demo.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -224,10 +152,7 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException ex) {
             return false;
@@ -254,3 +179,4 @@ public class JwtTokenProvider {
         return getClaims(token).get("userId", Long.class);
     }
 }
+
