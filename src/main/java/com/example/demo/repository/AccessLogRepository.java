@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AccessLogRepository extends JpaRepository<AccessLog, Long> {
 
-    List<AccessLog> findByDigitalKeyId(Long digitalKeyId);
-
     List<AccessLog> findByGuestId(Long guestId);
+
+    List<AccessLog> findByDigitalKeyId(Long keyId);
 }

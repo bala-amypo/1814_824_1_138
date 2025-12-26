@@ -8,6 +8,4 @@ import java.util.List;
 public interface RoomBookingRepository extends JpaRepository<RoomBooking, Long> {
 
     List<RoomBooking> findByGuestId(Long guestId);
-
-    List<RoomBooking> findByActiveTrue();
 }
