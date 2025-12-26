@@ -38,26 +38,26 @@ public class AccessLogServiceImpl implements AccessLogService {
     @Override
     public AccessLog createLog(AccessLog log) {
 
-        // 1️⃣ Future time validation (testAccessLogFutureTimeNegative)
+        // 1. future time check
         if (log.getAccessTime().isAfter(Instant.now())) {
             throw new IllegalArgumentException("future");
         }
 
-        // 2️⃣ Fetch Digital Key
+        // 2. fetch key
         DigitalKey key = digitalKeyRepository.findById(log.getDigitalKey().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Key not found"));
 
-        // 3️⃣ INACTIVE KEY → DENIED (testAccessLogCreateDeniedForInactiveKey)
+        // 3. inactive key → DENIED
         if (!Boolean.TRUE.equals(key.getActive())) {
             log.setResult("DENIED");
             return accessLogRepository.save(log);
         }
 
-        // 4️⃣ Fetch Guest
+        // 4. fetch guest
         Guest guest = guestRepository.findById(log.getGuest().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Guest not found"));
 
-        // 5️⃣ Booking owner → SUCCESS
+        // 5. booking owner → SUCCESS
         if (key.getBooking() != null
                 && key.getBooking().getGuest() != null
                 && key.getBooking().getGuest().getId().equals(guest.getId())) {
@@ -66,14 +66,13 @@ public class AccessLogServiceImpl implements AccessLogService {
             return accessLogRepository.save(log);
         }
 
-        // 6️⃣ Approved key share → SUCCESS
+        // 6. shared access (NO status check)
         List<KeyShareRequest> shares =
                 keyShareRequestRepository.findBySharedWithId(guest.getId());
 
         Instant now = Instant.now();
         for (KeyShareRequest req : shares) {
             if (req.getDigitalKey().getId().equals(key.getId())
-                    && "APPROVED".equals(req.getStatus())
                     && !now.isBefore(req.getShareStart())
                     && !now.isAfter(req.getShareEnd())) {
 
@@ -82,14 +81,13 @@ public class AccessLogServiceImpl implements AccessLogService {
             }
         }
 
-        // 7️⃣ Default → DENIED
+        // 7. default deny
         log.setResult("DENIED");
         return accessLogRepository.save(log);
     }
 
     @Override
     public AccessLog logAccess(AccessLog log) {
-        // Alias for controller
         return createLog(log);
     }
 
