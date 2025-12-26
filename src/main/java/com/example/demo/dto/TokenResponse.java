@@ -12,4 +12,3 @@ public class TokenResponse {
         return token;
     }
 }
-    
