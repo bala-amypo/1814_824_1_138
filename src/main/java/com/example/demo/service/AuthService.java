@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.AuthRequestDTO;
-import com.example.demo.dto.TokenResponseDTO;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.TokenResponse;
 
 public interface AuthService {
-    TokenResponseDTO login(AuthRequestDTO request);
+    TokenResponse login(LoginRequest request);
 }

@@ -1,20 +1,15 @@
 package com.example.demo.dto;
 
-public class TokenResponseDTO {
+public class TokenResponse {
+
     private String token;
 
-    public TokenResponseDTO() {
-    }
-
-    public TokenResponseDTO(String token) {
+    public TokenResponse(String token) {
         this.token = token;
     }
 
     public String getToken() {
         return token;
     }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 }
+    

@@ -1,27 +1,38 @@
 package com.example.demo.security;
 
 import com.example.demo.model.Guest;
-import com.example.demo.repository.GuestRepository;
-import org.springframework.security.core.userdetails.*;
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.*;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-@Service
-public class CustomUserDetailsService implements UserDetailsService {
+import java.util.Collection;
+import java.util.List;
 
-    private final GuestRepository guestRepository;
+public class CustomUserDetails implements UserDetails {
 
-    public CustomUserDetailsService(GuestRepository guestRepository) {
-        this.guestRepository = guestRepository;
+    private final Guest guest;
+
+    public CustomUserDetails(Guest guest) {
+        this.guest = guest;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
-
-        Guest guest = guestRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found: " + email));
-
-        return new CustomUserDetails(guest);
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(guest.getRole()));
     }
+
+    @Override
+    public String getPassword() {
+        return guest.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return guest.getEmail();
+    }
+
+    @Override public boolean isAccountNonExpired() { return true; }
+    @Override public boolean isAccountNonLocked() { return true; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
+    @Override public boolean isEnabled() { return true; }
 }
