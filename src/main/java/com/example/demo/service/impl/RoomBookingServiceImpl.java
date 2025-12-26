@@ -13,7 +13,6 @@ public class RoomBookingServiceImpl implements RoomBookingService {
 
     private final RoomBookingRepository roomBookingRepository;
 
-    // ✅ REQUIRED BY TEST
     public RoomBookingServiceImpl(RoomBookingRepository roomBookingRepository) {
         this.roomBookingRepository = roomBookingRepository;
     }
@@ -40,5 +39,18 @@ public class RoomBookingServiceImpl implements RoomBookingService {
     @Override
     public List<RoomBooking> getBookingsForGuest(Long guestId) {
         return roomBookingRepository.findByGuestId(guestId);
+    }
+
+    @Override
+    public RoomBooking getBookingById(Long id) {
+        return roomBookingRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Booking not found: " + id));
+    }
+
+    @Override
+    public List<RoomBooking> getBookingsByGuest(Long guestId) {
+        // Alias for controller
+        return getBookingsForGuest(guestId);
     }
 }
