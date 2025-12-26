@@ -1,22 +1,74 @@
+// package com.example.demo.security;
+
+// import jakarta.servlet.*;
+// import jakarta.servlet.http.HttpServletRequest;
+// import org.springframework.stereotype.Component;
+// import org.springframework.web.filter.OncePerRequestFilter;
+// import java.io.IOException;
+
+// @Component
+// public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+//     @Override
+//     protected void doFilterInternal(
+//             HttpServletRequest request,
+//             jakarta.servlet.http.HttpServletResponse response,
+//             FilterChain filterChain
+//     ) throws ServletException, IOException {
+
+//         // JWT logic can be added later
+//         filterChain.doFilter(request, response);
+//     }
+// }
 package com.example.demo.security;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private final JwtTokenProvider jwtTokenProvider;
+    private final CustomUserDetailsService userDetailsService;
+
+    public JwtAuthenticationFilter(
+            JwtTokenProvider jwtTokenProvider,
+            CustomUserDetailsService userDetailsService) {
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.userDetailsService = userDetailsService;
+    }
+
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
-            jakarta.servlet.http.HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+            HttpServletResponse response,
+            FilterChain filterChain)
+            throws ServletException, IOException {
 
-        // JWT logic can be added later
+        String header = request.getHeader("Authorization");
+
+        if (header != null && header.startsWith("Bearer ")) {
+            String token = header.substring(7);
+            if (jwtTokenProvider.validateToken(token)) {
+                String email = jwtTokenProvider.getEmailFromToken(token);
+                UserDetails userDetails =
+                        userDetailsService.loadUserByUsername(email);
+
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
+
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+        }
         filterChain.doFilter(request, response);
     }
 }

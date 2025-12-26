@@ -54,7 +54,7 @@
             <scope>runtime</scope>
         </dependency>
         
-        <!-- JWT -->
+        JWT
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
