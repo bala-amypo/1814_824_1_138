@@ -1,11 +1,26 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
 
 public class JwtTokenProvider {
+
+    public String generateToken(Authentication authentication) {
+        return null;
+    }
+
+    public boolean validateToken(String token) {
+        return false;
+    }
+
+    public Long getUserIdFromToken(String token) {
+        return null;
+    }
+
+    public String getEmailFromToken(String token) {
+        return null;
+    }
+
+    public String getRoleFromToken(String token) {
+        return null;
+    }
 }
