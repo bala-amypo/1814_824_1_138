@@ -16,7 +16,6 @@ public class AccessLogServiceImpl implements AccessLogService {
     private final GuestRepository guestRepository;
     private final KeyShareRequestRepository keyShareRequestRepository;
 
-    // ✅ REQUIRED BY TEST
     public AccessLogServiceImpl(
             AccessLogRepository accessLogRepository,
             DigitalKeyRepository digitalKeyRepository,
@@ -34,9 +33,14 @@ public class AccessLogServiceImpl implements AccessLogService {
         if (log.getAccessTime().isAfter(Instant.now())) {
             throw new IllegalArgumentException("Access time cannot be in future");
         }
-
         log.setResult("SUCCESS");
         return accessLogRepository.save(log);
+    }
+
+    @Override
+    public AccessLog logAccess(AccessLog log) {
+        // Alias for controller
+        return createLog(log);
     }
 
     @Override

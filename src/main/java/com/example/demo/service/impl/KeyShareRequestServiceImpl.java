@@ -14,7 +14,6 @@ public class KeyShareRequestServiceImpl implements KeyShareRequestService {
     private final DigitalKeyRepository digitalKeyRepository;
     private final GuestRepository guestRepository;
 
-    // ✅ REQUIRED BY TEST
     public KeyShareRequestServiceImpl(
             KeyShareRequestRepository keyShareRequestRepository,
             DigitalKeyRepository digitalKeyRepository,
@@ -35,6 +34,12 @@ public class KeyShareRequestServiceImpl implements KeyShareRequestService {
             throw new IllegalArgumentException("sharedBy and sharedWith cannot be same");
         }
         return keyShareRequestRepository.save(request);
+    }
+
+    @Override
+    public KeyShareRequest shareKey(KeyShareRequest request) {
+        // Alias for controller
+        return createShareRequest(request);
     }
 
     @Override
