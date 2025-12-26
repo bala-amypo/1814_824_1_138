@@ -1,12 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.AuthRequestDTO;
-import com.example.demo.dto.TokenResponseDTO;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.TokenResponse;
 import com.example.demo.service.AuthService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -16,7 +16,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public TokenResponseDTO login(@RequestBody AuthRequestDTO request) {
+    public TokenResponse login(@RequestBody LoginRequest request) {
         return authService.login(request);
     }
 }
