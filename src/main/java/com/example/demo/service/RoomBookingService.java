@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.model.RoomBooking;
-
 import java.util.List;
 
 public interface RoomBookingService {
@@ -10,7 +9,5 @@ public interface RoomBookingService {
 
     RoomBooking updateBooking(Long id, RoomBooking booking);
 
-    RoomBooking getBookingById(Long id);
-
-    List<RoomBooking> getBookingsByGuest(Long guestId);
+    List<RoomBooking> getBookingsForGuest(Long guestId);
 }

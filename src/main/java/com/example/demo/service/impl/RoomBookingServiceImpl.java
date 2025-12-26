@@ -11,34 +11,34 @@ import java.util.List;
 @Service
 public class RoomBookingServiceImpl implements RoomBookingService {
 
-    private final RoomBookingRepository bookingRepository;
+    private final RoomBookingRepository roomBookingRepository;
 
-    public RoomBookingServiceImpl(RoomBookingRepository bookingRepository) {
-        this.bookingRepository = bookingRepository;
+    // ✅ REQUIRED BY TEST
+    public RoomBookingServiceImpl(RoomBookingRepository roomBookingRepository) {
+        this.roomBookingRepository = roomBookingRepository;
     }
 
     @Override
     public RoomBooking createBooking(RoomBooking booking) {
-        return bookingRepository.save(booking);
+        if (booking.getCheckInDate().isAfter(booking.getCheckOutDate())) {
+            throw new IllegalArgumentException("Check-in date must be before check-out date");
+        }
+        return roomBookingRepository.save(booking);
     }
 
     @Override
     public RoomBooking updateBooking(Long id, RoomBooking booking) {
-        RoomBooking existing = getBookingById(id);
-        existing.setRoomNumber(booking.getRoomNumber());
+        RoomBooking existing = roomBookingRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Booking not found: " + id));
+
         existing.setCheckInDate(booking.getCheckInDate());
         existing.setCheckOutDate(booking.getCheckOutDate());
-        return bookingRepository.save(existing);
+        return roomBookingRepository.save(existing);
     }
 
     @Override
-    public RoomBooking getBookingById(Long id) {
-        return bookingRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
-    }
-
-    @Override
-    public List<RoomBooking> getBookingsByGuest(Long guestId) {
-        return bookingRepository.findByGuestId(guestId);
+    public List<RoomBooking> getBookingsForGuest(Long guestId) {
+        return roomBookingRepository.findByGuestId(guestId);
     }
 }
