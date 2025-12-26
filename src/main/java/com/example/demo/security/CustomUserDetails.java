@@ -1,7 +1,7 @@
 package com.example.demo.security;
 
 import com.example.demo.model.Guest;
-import org.springframework.security.core.*;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,6 +14,10 @@ public class CustomUserDetails implements UserDetails {
 
     public CustomUserDetails(Guest guest) {
         this.guest = guest;
+    }
+
+    public Long getId() {
+        return guest.getId();
     }
 
     @Override
@@ -31,8 +35,17 @@ public class CustomUserDetails implements UserDetails {
         return guest.getEmail();
     }
 
-    @Override public boolean isAccountNonExpired() { return true; }
-    @Override public boolean isAccountNonLocked() { return guest.getActive(); }
-    @Override public boolean isCredentialsNonExpired() { return true; }
-    @Override public boolean isEnabled() { return guest.getActive(); }
+    @Override
+    public boolean isAccountNonExpired() { return true; }
+
+    @Override
+    public boolean isAccountNonLocked() { return true; }
+
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
+
+    @Override
+    public boolean isEnabled() {
+        return guest.getActive();
+    }
 }
