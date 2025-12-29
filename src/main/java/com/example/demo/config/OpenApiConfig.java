@@ -16,7 +16,7 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
 
-        // Define Bearer Security Scheme
+
         SecurityScheme bearerScheme = new SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
@@ -28,11 +28,11 @@ public class OpenApiConfig {
                 .servers(List.of(
                         new Server().url("https://9018.32procr.amypo.ai/")
                 ))
-                // Register security scheme
+                
                 .components(new Components()
                         .addSecuritySchemes("BearerAuth", bearerScheme)
                 )
-                // Apply security globally
+                
                 .addSecurityItem(new SecurityRequirement()
                         .addList("BearerAuth")
                 );
