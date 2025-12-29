@@ -1,58 +1,72 @@
+// // package com.example.demo.dto;
+
+// // public class RegisterRequestDTO {
+
+// //     private String username;
+// //     private String password;
+// //     private String role;
+
+// //     public String getUsername() {
+// //         return username;
+// //     }
+
+// //     public void setUsername(String username) {
+// //         this.username = username;
+// //     }
+
+// //     public String getPassword() {
+// //         return password;
+// //     }
+    
+// //     public void setPassword(String password) {
+// //         this.password = password;
+// //     }
+
+// //     public String getRole() {
+// //         return role;
+// //     }
+    
+// //     public void setRole(String role) {
+// //         this.role = role;
+// //     }
+// // }
 // package com.example.demo.dto;
 
-// public class RegisterRequestDTO {
+// public class RegisterRequest {
 
-//     private String username;
+//     private String email;
 //     private String password;
-//     private String role;
 
-//     public String getUsername() {
-//         return username;
+//     public RegisterRequest() {
 //     }
 
-//     public void setUsername(String username) {
-//         this.username = username;
+//     public String getEmail() {
+//         return email;
 //     }
 
 //     public String getPassword() {
 //         return password;
 //     }
-    
+
+//     public void setEmail(String email) {
+//         this.email = email;
+//     }
+
 //     public void setPassword(String password) {
 //         this.password = password;
 //     }
-
-//     public String getRole() {
-//         return role;
-//     }
-    
-//     public void setRole(String role) {
-//         this.role = role;
-//     }
 // }
+
+
 package com.example.demo.dto;
 
 public class RegisterRequest {
-
     private String email;
     private String password;
 
-    public RegisterRequest() {
-    }
+    public String getEmail() { return email; }
+    public String getPassword() { return password; }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setEmail(String email) { this.email = email; }
+    public void setPassword(String password) { this.password = password; }
 }
