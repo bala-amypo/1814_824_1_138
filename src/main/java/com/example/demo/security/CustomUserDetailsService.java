@@ -1,67 +1,31 @@
-// package com.example.demo.security;
-
-// import com.example.demo.model.Guest;
-// import com.example.demo.repository.GuestRepository;
-// import org.springframework.security.core.userdetails.UserDetails;
-// import org.springframework.security.core.userdetails.UserDetailsService;
-// import org.springframework.security.core.userdetails.UsernameNotFoundException;
-// import org.springframework.stereotype.Service;
-
-// @Service
-// public class CustomUserDetailsService implements UserDetailsService {
-
-//     private final GuestRepository guestRepository;
-
-//     public CustomUserDetailsService(GuestRepository guestRepository) {
-//         this.guestRepository = guestRepository;
-//     }
-
-//     @Override
-//     public UserDetails loadUserByUsername(String email)
-//             throws UsernameNotFoundException {
-
-//         Guest guest = guestRepository.findByEmail(email)
-//                 .orElseThrow(() ->
-//                         new UsernameNotFoundException("User not found: " + email));
-
-//         return new CustomUserDetails(guest);
-//     }
-// }
-
-
 package com.example.demo.security;
 
-import com.example.demo.entity.User;
-import com.example.demo.repository.UserRepository;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.*;
+import com.example.demo.model.Guest;
+import com.example.demo.repository.GuestRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final GuestRepository guestRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public CustomUserDetailsService(GuestRepository guestRepository) {
+        this.guestRepository = guestRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
-        User user = userRepository.findByEmail(email)
+        Guest guest = guestRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found"));
+                        new UsernameNotFoundException("User not found: " + email));
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                user.getRoles().stream()
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList())
-        );
+        return new CustomUserDetails(guest);
     }
 }
+
+
