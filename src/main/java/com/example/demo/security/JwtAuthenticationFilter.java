@@ -36,27 +36,24 @@ import java.io.IOException;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private JwtTokenProvider jwtTokenProvider;
-    private CustomUserDetailsService customUserDetailsService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final CustomUserDetailsService userDetailsService;
 
-    // ✅ NO-ARGS constructor (ONLY one Spring sees)
-    public JwtAuthenticationFilter() {
-    }
-
-    // ✅ setters for manual injection
-    public void setJwtTokenProvider(JwtTokenProvider jwtTokenProvider) {
+    // ✅ REQUIRED constructor (fixes constructor error)
+    public JwtAuthenticationFilter(
+            JwtTokenProvider jwtTokenProvider,
+            CustomUserDetailsService userDetailsService
+    ) {
         this.jwtTokenProvider = jwtTokenProvider;
-    }
-
-    public void setCustomUserDetailsService(CustomUserDetailsService customUserDetailsService) {
-        this.customUserDetailsService = customUserDetailsService;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
 
@@ -65,12 +62,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (jwtTokenProvider.validateToken(token)) {
 
-                String email = jwtTokenProvider
-                        .getClaims(token)
-                        .getSubject();
+                // ✅ FIXED: method now exists
+                String username = jwtTokenProvider.getUsernameFromToken(token);
 
                 UserDetails userDetails =
-                        customUserDetailsService.loadUserByUsername(email);
+                        userDetailsService.loadUserByUsername(username);
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(

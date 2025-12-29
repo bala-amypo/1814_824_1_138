@@ -1,69 +1,133 @@
+// package com.example.demo.security;
+
+// import com.example.demo.model.Guest;
+// import org.springframework.security.core.Authentication;
+// import org.springframework.security.core.userdetails.UserDetails;
+// import org.springframework.stereotype.Component;
+
+// import java.util.Base64;
+
+// @Component
+// public class JwtTokenProvider {
+
+//     /*
+//      * Fake token format (Base64):
+//      * userId|email|role
+//      */
+
+//     public String generateToken(Authentication authentication) {
+//         Object principal = authentication.getPrincipal();
+
+//         if (principal instanceof UserDetails userDetails) {
+//             String email = userDetails.getUsername();
+//             String role = userDetails.getAuthorities().iterator().next().getAuthority();
+
+//             // userId is NOT inside UserDetails → encode dummy but non-null
+//             Long userId = Math.abs(email.hashCode()) + 0L;
+
+//             String tokenData = userId + "|" + email + "|" + role;
+//             return Base64.getEncoder().encodeToString(tokenData.getBytes());
+//         }
+//         return null;
+//     }
+
+//     public boolean validateToken(String token) {
+//         try {
+//             String decoded = new String(Base64.getDecoder().decode(token));
+//             return decoded.split("\\|").length == 3;
+//         } catch (Exception e) {
+//             return false;
+//         }
+//     }
+
+//     public Long getUserIdFromToken(String token) {
+//         try {
+//             String decoded = new String(Base64.getDecoder().decode(token));
+//             return Long.parseLong(decoded.split("\\|")[0]);
+//         } catch (Exception e) {
+//             return null;
+//         }
+//     }
+
+//     public String getEmailFromToken(String token) {
+//         try {
+//             String decoded = new String(Base64.getDecoder().decode(token));
+//             return decoded.split("\\|")[1];
+//         } catch (Exception e) {
+//             return null;
+//         }
+//     }
+
+//     public String getRoleFromToken(String token) {
+//         try {
+//             String decoded = new String(Base64.getDecoder().decode(token));
+//             return decoded.split("\\|")[2];
+//         } catch (Exception e) {
+//             return null;
+//         }
+//     }
+// }
 package com.example.demo.security;
 
-import com.example.demo.model.Guest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Base64;
+import java.security.Key;
+import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
 
-    /*
-     * Fake token format (Base64):
-     * userId|email|role
-     */
+    @Value("${jwt.secret:test-secret-key}")
+    private String jwtSecret;
 
-    public String generateToken(Authentication authentication) {
-        Object principal = authentication.getPrincipal();
+    @Value("${jwt.expiration-ms:3600000}")
+    private long jwtExpirationMs;
 
-        if (principal instanceof UserDetails userDetails) {
-            String email = userDetails.getUsername();
-            String role = userDetails.getAuthorities().iterator().next().getAuthority();
-
-            // userId is NOT inside UserDetails → encode dummy but non-null
-            Long userId = Math.abs(email.hashCode()) + 0L;
-
-            String tokenData = userId + "|" + email + "|" + role;
-            return Base64.getEncoder().encodeToString(tokenData.getBytes());
-        }
-        return null;
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 
+    // ✅ Generate token
+    public String generateToken(Long userId, String email, Set<String> roles) {
+        return Jwts.builder()
+                .claim("userId", userId)
+                .claim("roles", String.join(",", roles))
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    // ✅ Extract username (email)
+    public String getUsernameFromToken(String token) {
+        return getClaims(token).getSubject();
+    }
+
+    // ✅ Extract claims
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    // ✅ Validate token
     public boolean validateToken(String token) {
         try {
-            String decoded = new String(Base64.getDecoder().decode(token));
-            return decoded.split("\\|").length == 3;
-        } catch (Exception e) {
+            Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
-        }
-    }
-
-    public Long getUserIdFromToken(String token) {
-        try {
-            String decoded = new String(Base64.getDecoder().decode(token));
-            return Long.parseLong(decoded.split("\\|")[0]);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public String getEmailFromToken(String token) {
-        try {
-            String decoded = new String(Base64.getDecoder().decode(token));
-            return decoded.split("\\|")[1];
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public String getRoleFromToken(String token) {
-        try {
-            String decoded = new String(Base64.getDecoder().decode(token));
-            return decoded.split("\\|")[2];
-        } catch (Exception e) {
-            return null;
         }
     }
 }
