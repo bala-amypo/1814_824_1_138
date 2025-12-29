@@ -39,11 +39,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtTokenProvider jwtTokenProvider;
     private CustomUserDetailsService customUserDetailsService;
 
-    // ✅ REQUIRED by Spring (NO-ARGS constructor)
+    // ✅ No-args constructor (required by Spring)
     public JwtAuthenticationFilter() {
     }
 
-    // ✅ REQUIRED by SecurityConfig (PARAMETERIZED constructor)
+    // ✅ Constructor used in SecurityConfig
     public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider,
                                    CustomUserDetailsService customUserDetailsService) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -63,7 +63,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (jwtTokenProvider != null && jwtTokenProvider.validateToken(token)) {
 
-                String email = jwtTokenProvider.getUsernameFromToken(token);
+                // ✅ FIX: use existing method
+                String email = jwtTokenProvider
+                        .getClaims(token)
+                        .getSubject();
 
                 UserDetails userDetails =
                         customUserDetailsService.loadUserByUsername(email);
